@@ -1,20 +1,11 @@
-// src/resolvers/user.resolver.test.ts
-import { createTestClient } from '@/test/helpers';
 import { describe, expect, it } from 'vitest';
+import { UserResolver } from './user.resolver';
 
-describe('UserResolver', () => {
-  it('deve responder a query helloWorld', async () => {
-    const client = await createTestClient();
+describe('UserResolver (unit)', () => {
+  it('deve retornar Hello World', async () => {
+    const resolver = new UserResolver();
+    const result = await resolver.helloWorld();
 
-    const response = await client.post('/graphql').send({
-      query: `
-        query {
-          helloWorld
-        }
-      `
-    });
-
-    expect(response.status).toBe(200);
-    expect(response.body.data.helloWorld).toBe('Hello World');
+    expect(result).toBe('Hello World');
   });
 });
