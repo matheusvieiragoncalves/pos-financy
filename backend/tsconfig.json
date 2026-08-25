@@ -5,15 +5,14 @@
 
   "compilerOptions": {
     "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
-    "module": "nodenext",
     "target": "es2022",
+    "module": "ESNext" /* 1. Alterado de nodenext */,
+    "moduleResolution": "bundler" /* 2. Alterado de node16 */,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowImportingTsExtensions": true,
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"]
