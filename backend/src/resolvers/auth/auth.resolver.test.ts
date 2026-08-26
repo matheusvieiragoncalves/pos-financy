@@ -11,4 +11,14 @@ describe('AuthResolver (unit)', () => {
 
     expect(result).toBe('Hello World');
   });
+
+  it('deve lançar UnauthorizedError se as credenciais forem inválidas', async () => {
+    const resolver = new AuthResolver();
+    await expect(
+      resolver.login({
+        email: '',
+        password: ''
+      })
+    ).rejects.toThrow('Credenciais inválidas');
+  });
 });
