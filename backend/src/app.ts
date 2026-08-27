@@ -4,7 +4,9 @@ import express from 'express';
 
 import { buildSchema } from 'type-graphql';
 
+import { unwrapResolverError } from '@apollo/server/errors';
 import { expressMiddleware } from '@as-integrations/express5';
+import { AppError } from './errors/app-error';
 import { AuthResolver } from './resolvers/auth/auth.resolver';
 import { UserResolver } from './resolvers/user/user.resolver';
 
@@ -22,16 +24,32 @@ export async function createApp() {
   const server = new ApolloServer({
     schema,
     formatError: (formattedError, error) => {
-      // console.error('[GraphQL Error]', error);
+      const originalError = unwrapResolverError(error);
 
-      if (
+      // console.error('[GraphQL Error]', originalError);
+
+      const isAppError = originalError instanceof AppError;
+
+      const isProdOrTest =
         process.env.NODE_ENV === 'production' ||
-        process.env.NODE_ENV === 'test'
-      ) {
+        process.env.NODE_ENV === 'test';
+
+      if (!isAppError) {
+        return {
+          message: 'Erro interno do servidor',
+          extensions: {
+            code: 'INTERNAL_SERVER_ERROR',
+            http: { status: 500 }
+          }
+        };
+      }
+
+      if (isProdOrTest) {
         return {
           message: formattedError.message,
           extensions: {
-            code: formattedError.extensions?.code ?? 'INTERNAL_SERVER_ERROR'
+            code: formattedError.extensions?.code,
+            http: formattedError.extensions?.http
           }
         };
       }
@@ -39,6 +57,7 @@ export async function createApp() {
       return formattedError;
     }
   });
+
   await server.start();
 
   app.use('/graphql', express.json(), expressMiddleware(server));

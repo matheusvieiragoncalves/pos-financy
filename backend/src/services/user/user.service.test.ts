@@ -1,3 +1,5 @@
+// backend/src/services/user/user.service.test.ts
+import { FakePasswordService } from '@/test/fakes/fake-password.service';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { prismaClient } from '../../../prisma/prisma';
 import { UserService } from './user.service';
@@ -18,18 +20,18 @@ describe('UserService (unit)', () => {
   let service: UserService;
 
   beforeEach(() => {
-    service = new UserService();
+    service = new UserService(new FakePasswordService());
     vi.clearAllMocks();
   });
 
   describe('create', () => {
-    it('deve criar um usuário quando o email não existe', async () => {
+    it('deve criar um usuário com a senha já hasheada', async () => {
       vi.mocked(prismaClient.user.findUnique).mockResolvedValue(null);
       vi.mocked(prismaClient.user.create).mockResolvedValue({
         id: '1',
         name: 'John',
         email: 'john@test.com',
-        hashPassword: '123456'
+        hashPassword: 'hashed-123456'
       } as any);
 
       const result = await service.create({
@@ -38,9 +40,13 @@ describe('UserService (unit)', () => {
         password: '123456'
       });
 
-      expect(result.email).toBe('john@test.com');
+      expect(result.hashPassword).toBe('hashed-123456');
       expect(prismaClient.user.create).toHaveBeenCalledWith({
-        data: { name: 'John', email: 'john@test.com', hashPassword: '123456' }
+        data: {
+          name: 'John',
+          email: 'john@test.com',
+          hashPassword: 'hashed-123456'
+        }
       });
     });
 
@@ -87,7 +93,6 @@ describe('UserService (unit)', () => {
   });
 
   describe('update', () => {
-
     it('deve atualizar um usuário existente', async () => {
       vi.mocked(prismaClient.user.findUnique).mockResolvedValue({
         id: '1',

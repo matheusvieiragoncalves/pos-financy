@@ -1,8 +1,15 @@
 import { CreateUserInput, UpdateUserInput } from '@/dtos/input/user.input';
 import { UserModel } from '@/models/user.model.js';
 import { prismaClient } from '../../../prisma/prisma';
+import { PasswordService } from '../password/password.service';
+import { IPasswordService } from '../password/password.service.interface';
+import { IUserService } from './user.service.interface';
 
-export class UserService {
+export class UserService implements IUserService {
+  constructor(
+    private readonly passwordService: IPasswordService = new PasswordService()
+  ) {}
+
   private async _findById(id: string): Promise<UserModel> {
     const user = await prismaClient.user.findUnique({ where: { id } });
 
@@ -13,7 +20,7 @@ export class UserService {
     return user;
   }
 
-  private async _findByEmail(email: string): Promise<UserModel | null> {
+  async findByEmail(email: string): Promise<UserModel | null> {
     return prismaClient.user.findUnique({ where: { email } });
   }
 
@@ -24,17 +31,19 @@ export class UserService {
   async create(data: CreateUserInput): Promise<UserModel> {
     const { name, email, password } = data;
 
-    const user = await this._findByEmail(email);
+    const user = await this.findByEmail(email);
 
     if (user) {
       throw new Error('User already exists');
     }
 
+    const hashedPassword = await this.passwordService.hash(password);
+
     return await prismaClient.user.create({
       data: {
         name,
         email,
-        hashPassword: password
+        hashPassword: hashedPassword
       }
     });
   }

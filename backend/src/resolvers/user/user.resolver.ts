@@ -1,11 +1,12 @@
 import { CreateUserInput, UpdateUserInput } from '@/dtos/input/user.input';
 import { UserModel } from '@/models/user.model';
 import { UserService } from '@/services/user/user.service';
+import { IUserService } from '@/services/user/user.service.interface';
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 
 @Resolver()
 export class UserResolver {
-  private readonly userService = new UserService();
+  constructor(private readonly userService: IUserService = new UserService()) {}
 
   @Query(() => [UserModel])
   async users(): Promise<UserModel[]> {

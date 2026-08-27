@@ -1,21 +1,25 @@
 import { describe, expect, it } from 'vitest';
+import { PasswordService } from '../password/password.service';
 import { UserService } from './user.service';
 
 describe('UserService (integration)', () => {
-  const service = new UserService();
+  const service = new UserService(new PasswordService());
 
-  it('deve criar e depois encontrar o usuário no banco', async () => {
+  it('deve criar o usuário com a senha real hasheada no banco', async () => {
     const created = await service.create({
       name: 'Maria',
       email: 'maria@test.com',
       password: '123456'
     });
 
-    expect(created.id).toBeDefined();
+    expect(created.hashPassword).not.toBe('123456');
 
-    const all = await service.findAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].email).toBe('maria@test.com');
+    const passwordService = new PasswordService();
+    const isValid = await passwordService.compare(
+      '123456',
+      created.hashPassword as string
+    );
+    expect(isValid).toBe(true);
   });
 
   it('deve impedir criação de usuário com email duplicado', async () => {
