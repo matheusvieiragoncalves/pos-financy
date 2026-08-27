@@ -17,7 +17,7 @@ describe('AuthResolver (integration)', () => {
 
     const response = await client.post('/graphql').send({
       query: `
-        mutation Login($data: LoginInputDTO!) {
+        mutation Login($data: LoginInput!) {
           login(data: $data)
         }
       `,
@@ -35,7 +35,7 @@ describe('AuthResolver (integration)', () => {
 
     const response = await client.post('/graphql').send({
       query: `
-        mutation Login($data: LoginInputDTO!) {
+        mutation Login($data: LoginInput!) {
           login(data: $data)
         }
       `,
@@ -58,7 +58,7 @@ describe('AuthResolver (integration)', () => {
 
     const response = await client.post('/graphql').send({
       query: `
-        mutation Login($data: LoginInputDTO!) {
+        mutation Login($data: LoginInput!) {
           login(data: $data)
         }
       `,
@@ -79,7 +79,7 @@ describe('AuthResolver (integration)', () => {
       const client = await createTestClient();
 
       const response = await client.post('/graphql').send({
-        query: `mutation Login($data: LoginInputDTO!) { login(data: $data) }`,
+        query: `mutation Login($data: LoginInput!) { login(data: $data) }`,
         variables: {
           data: { email: 'inexistente@teste.com', password: '123456' }
         }
@@ -99,7 +99,7 @@ describe('AuthResolver (integration)', () => {
       const client = await createTestClient();
 
       const response = await client.post('/graphql').send({
-        query: `mutation Login($data: LoginInputDTO!) { login(data: $data) }`,
+        query: `mutation Login($data: LoginInput!) { login(data: $data) }`,
         variables: { data: { email: 'qualquer@teste.com', password: '123456' } }
       });
 
@@ -119,7 +119,7 @@ describe('AuthResolver (integration)', () => {
       const client = await createTestClient();
 
       const response = await client.post('/graphql').send({
-        query: `mutation Login($data: LoginInputDTO!) { login(data: $data) }`,
+        query: `mutation Login($data: LoginInput!) { login(data: $data) }`,
         variables: {
           data: { email: 'inexistente@teste.com', password: '123456' }
         }

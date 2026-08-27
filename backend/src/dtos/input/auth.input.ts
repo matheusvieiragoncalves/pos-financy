@@ -1,7 +1,7 @@
 import { Field, InputType } from 'type-graphql';
 
 @InputType()
-export class LoginInputDTO {
+export class LoginInput {
   @Field(() => String)
   email!: string;
 

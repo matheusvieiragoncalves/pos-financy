@@ -14,13 +14,13 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
-input LoginInputDTO {
+input LoginInput {
   email: String!
   password: String!
 }
 
 type Mutation {
-  login(data: LoginInputDTO!): String!
+  login(data: LoginInput!): String!
   userCreate(data: CreateUserInput!): UserModel!
   userDelete(id: String!): UserModel!
   userUpdate(data: UpdateUserInput!, id: String!): UserModel!

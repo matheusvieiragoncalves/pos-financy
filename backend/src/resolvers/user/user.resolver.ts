@@ -1,14 +1,16 @@
 import { CreateUserInput, UpdateUserInput } from '@/dtos/input/user.input';
+import { isAuthenticated } from '@/middlewares/auth.middleware';
 import { UserModel } from '@/models/user.model';
 import { UserService } from '@/services/user/user.service';
 import { IUserService } from '@/services/user/user.service.interface';
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: IUserService = new UserService()) {}
 
   @Query(() => [UserModel])
+  @UseMiddleware(isAuthenticated)
   async users(): Promise<UserModel[]> {
     return this.userService.findAll();
   }

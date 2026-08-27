@@ -7,6 +7,7 @@ import { buildSchema } from 'type-graphql';
 import { unwrapResolverError } from '@apollo/server/errors';
 import { expressMiddleware } from '@as-integrations/express5';
 import { AppError } from './errors/app-error';
+import { buildContext } from './graphql/context';
 import { AuthResolver } from './resolvers/auth/auth.resolver';
 import { UserResolver } from './resolvers/user/user.resolver';
 
@@ -60,7 +61,13 @@ export async function createApp() {
 
   await server.start();
 
-  app.use('/graphql', express.json(), expressMiddleware(server));
+  app.use(
+    '/graphql',
+    express.json(),
+    expressMiddleware(server, {
+      context: buildContext
+    })
+  );
 
   return app;
 }
