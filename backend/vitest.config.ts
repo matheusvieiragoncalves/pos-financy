@@ -21,7 +21,9 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'integration',
-          include: ['src/**/*.integration.test.ts']
+          include: ['src/**/*.integration.test.ts'],
+          setupFiles: ['./src/test/setup-integration.ts'],
+          env: { DATABASE_URL: 'file:./test.db' }
         }
       }
     ]

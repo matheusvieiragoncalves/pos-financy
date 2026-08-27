@@ -22,9 +22,12 @@ export async function createApp() {
   const server = new ApolloServer({
     schema,
     formatError: (formattedError, error) => {
-      console.error('[GraphQL Error]', error);
+      // console.error('[GraphQL Error]', error);
 
-      if (process.env.NODE_ENV === 'production') {
+      if (
+        process.env.NODE_ENV === 'production' ||
+        process.env.NODE_ENV === 'test'
+      ) {
         return {
           message: formattedError.message,
           extensions: {
