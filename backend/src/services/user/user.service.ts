@@ -50,8 +50,6 @@ export class UserService implements IUserService {
   }
 
   async update(id: string, data: UpdateUserInput): Promise<UserModel> {
-    const { name, email } = data;
-
     const user = await this._findById(id);
 
     if (!user) {
@@ -60,7 +58,7 @@ export class UserService implements IUserService {
 
     return await prismaClient.user.update({
       where: { id },
-      data: { name, email }
+      data
     });
   }
 

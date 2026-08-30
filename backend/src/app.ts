@@ -31,11 +31,9 @@ export async function createApp() {
 
       const isAppError = originalError instanceof AppError;
 
-      const isProdOrTest =
-        process.env.NODE_ENV === 'production' ||
-        process.env.NODE_ENV === 'test';
+      const isProd = process.env.NODE_ENV === 'production';
 
-      if (!isAppError) {
+      if (!isAppError || isProd) {
         return {
           message: 'Erro interno do servidor',
           extensions: {
@@ -45,7 +43,7 @@ export async function createApp() {
         };
       }
 
-      if (isProdOrTest) {
+      if (isProd) {
         return {
           message: formattedError.message,
           extensions: {

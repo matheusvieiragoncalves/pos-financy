@@ -14,12 +14,12 @@ export class CreateUserInput {
 
 @InputType()
 export class UpdateUserInput {
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   name?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   email?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   password?: string;
 }

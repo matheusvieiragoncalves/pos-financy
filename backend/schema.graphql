@@ -35,9 +35,9 @@ type Query {
 }
 
 input UpdateUserInput {
-  email: String!
-  name: String!
-  password: String!
+  email: String
+  name: String
+  password: String
 }
 
 type UserModel {

@@ -2,7 +2,7 @@
 
 ## Requisitos funcionais:
 
-[] O usuário pode criar uma conta e fazer login
+[X] O usuário pode criar uma conta e fazer login
 [] Deve ser possível criar uma transação
 [] Deve ser possível deletar uma transação
 [] Deve ser possível editar uma transação
@@ -14,7 +14,7 @@
 
 ## Requisitos não funcionais:
 
-[] TypeScript
-[] GraphQL
-[] Prisma
-[] SQLite
+[X] TypeScript
+[X] GraphQL
+[X] Prisma
+[X] SQLite
