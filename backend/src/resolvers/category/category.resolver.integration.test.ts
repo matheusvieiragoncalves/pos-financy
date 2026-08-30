@@ -45,6 +45,7 @@ describe('CategoryResolver (integration)', () => {
     const client = await createTestClient();
 
     const { accessToken } = await createAuthenticatedTestUser();
+    await createTestCategory();
 
     const response = await client
       .post('/graphql')

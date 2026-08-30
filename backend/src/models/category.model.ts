@@ -1,5 +1,15 @@
 import { CategoryColorEnum, CategoryIconEnum } from '@/enums';
-import { Field, GraphQLISODateTime, ID, ObjectType } from 'type-graphql';
+
+import {
+  Field,
+  GraphQLISODateTime,
+  ID,
+  ObjectType,
+  registerEnumType
+} from 'type-graphql';
+
+registerEnumType(CategoryIconEnum, { name: 'CategoryIconEnum' });
+registerEnumType(CategoryColorEnum, { name: 'CategoryColorEnum' });
 
 @ObjectType()
 export class CategoryModel {

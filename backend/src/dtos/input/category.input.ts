@@ -1,9 +1,6 @@
 import { CategoryColorEnum, CategoryIconEnum } from '@/enums';
 import { IsEnum, IsString, MaxLength } from 'class-validator';
-import { Field, InputType, registerEnumType } from 'type-graphql';
-
-registerEnumType(CategoryIconEnum, { name: 'CategoryIconEnum' });
-registerEnumType(CategoryColorEnum, { name: 'CategoryColorEnum' });
+import { Field, InputType } from 'type-graphql';
 
 @InputType()
 export class CreateCategoryInput {

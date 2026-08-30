@@ -11,6 +11,8 @@ beforeAll(() => {
 
 afterEach(async () => {
   // Limpa as tabelas entre cada teste, mantendo isolamento
+  await prismaClient.transaction.deleteMany();
+  await prismaClient.category.deleteMany();
   await prismaClient.user.deleteMany();
 });
 

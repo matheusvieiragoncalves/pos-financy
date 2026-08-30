@@ -10,6 +10,7 @@ import { AppError } from './errors/app-error';
 import { buildContext } from './graphql/context';
 import { AuthResolver } from './resolvers/auth/auth.resolver';
 import { CategoryResolver } from './resolvers/category/category.resolver';
+import { TransactionResolver } from './resolvers/transaction/transaction.resolver';
 import { UserResolver } from './resolvers/user/user.resolver';
 
 export async function createApp() {
@@ -18,7 +19,12 @@ export async function createApp() {
   app.use(cors({ origin: '*', credentials: true }));
 
   const schema = await buildSchema({
-    resolvers: [AuthResolver, UserResolver, CategoryResolver],
+    resolvers: [
+      AuthResolver,
+      UserResolver,
+      CategoryResolver,
+      TransactionResolver
+    ],
     emitSchemaFile: './schema.graphql',
     validate: true
   });
@@ -28,7 +34,7 @@ export async function createApp() {
     formatError: (formattedError, error) => {
       const originalError = unwrapResolverError(error);
 
-      // console.error('[GraphQL Error]', originalError);
+      console.error('[GraphQL Error]', originalError);
 
       const isAppError = originalError instanceof AppError;
 

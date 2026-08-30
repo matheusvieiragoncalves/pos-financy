@@ -1,9 +1,16 @@
 import { createApp } from '@/app';
-import { CategoryColorEnum, CategoryIconEnum } from '@/enums';
+import { CreateTransactionInput } from '@/dtos/input/transaction.input';
+import {
+  CategoryColorEnum,
+  CategoryIconEnum,
+  TransactionTypeEnum
+} from '@/enums';
+import { TransactionModel } from '@/models/transaction.model';
 import { UserModel } from '@/models/user.model';
 import { CategoryService } from '@/services/category/category.service';
 import { JwtService } from '@/services/jwt/jwt.service';
 import { PasswordService } from '@/services/password/password.service';
+import { TransactionService } from '@/services/transaction/transaction.service';
 import { UserService } from '@/services/user/user.service';
 import type { Express } from 'express';
 import request from 'supertest';
@@ -94,4 +101,30 @@ export async function createTestCategory(overrides?: {
   });
 
   return { category };
+}
+
+export async function createTestTransaction(
+  currentUserId: string,
+  overrides?: Partial<CreateTransactionInput>
+): Promise<{ transaction: TransactionModel }> {
+  const categoryId =
+    overrides?.categoryId ??
+    (await createTestCategory().then(({ category }) => category.id));
+
+  const attributes: CreateTransactionInput = {
+    amount: overrides?.amount ?? 100,
+    description: overrides?.description ?? 'Descrição da transação de teste',
+    date: overrides?.date ?? new Date(),
+    type: overrides?.type ?? TransactionTypeEnum.IN,
+    categoryId
+  };
+
+  const transactionService = new TransactionService();
+
+  const transaction = await transactionService.create(
+    currentUserId,
+    attributes
+  );
+
+  return { transaction };
 }

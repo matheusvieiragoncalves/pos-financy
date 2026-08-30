@@ -50,6 +50,14 @@ input CreateCategoryInput {
   title: String!
 }
 
+input CreateTransactionInput {
+  amount: Float!
+  categoryId: String!
+  date: DateTimeISO!
+  description: String!
+  type: TransactionTypeEnum!
+}
+
 input CreateUserInput {
   email: String!
   name: String!
@@ -75,6 +83,9 @@ type Mutation {
   categoryDelete(id: String!): CategoryModel!
   categoryUpdate(data: UpdateCategoryInput!, id: String!): CategoryModel!
   login(data: LoginInput!): LoginOutput!
+  transactionCreate(data: CreateTransactionInput!): TransactionModel!
+  transactionDelete(id: String!): TransactionModel!
+  transactionUpdate(data: UpdateTransactionInput!, id: String!): TransactionModel!
   userCreate(data: CreateUserInput!): UserModel!
   userDelete(id: String!): UserModel!
   userUpdate(data: UpdateUserInput!, id: String!): UserModel!
@@ -82,7 +93,27 @@ type Mutation {
 
 type Query {
   categories: [CategoryModel!]!
+  transactions: [TransactionModel!]!
   users: [UserModel!]!
+}
+
+type TransactionModel {
+  amount: Float!
+  category: CategoryModel
+  categoryId: String!
+  createdAt: DateTimeISO!
+  date: DateTimeISO!
+  description: String
+  id: ID!
+  type: TransactionTypeEnum!
+  updatedAt: DateTimeISO!
+  user: UserModel
+  userId: String!
+}
+
+enum TransactionTypeEnum {
+  IN
+  OUT
 }
 
 input UpdateCategoryInput {
@@ -90,6 +121,14 @@ input UpdateCategoryInput {
   description: String
   icon: CategoryIconEnum
   title: String
+}
+
+input UpdateTransactionInput {
+  amount: Float
+  categoryId: String
+  date: DateTimeISO
+  description: String
+  type: TransactionTypeEnum
 }
 
 input UpdateUserInput {

@@ -1,5 +1,6 @@
 import { JwtService } from '@/services/jwt/jwt.service';
 import { ExpressContextFunctionArgument } from '@as-integrations/express5';
+import { prismaClient } from '../../../prisma/prisma';
 
 export type TGraphQLContext = {
   userId?: string;
@@ -14,22 +15,25 @@ const buildContext = async ({
   req,
   res
 }: ExpressContextFunctionArgument): Promise<TGraphQLContext> => {
-  const authHeader = req.headers.authorization || '';
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.startsWith('Bearer ')
+    ? authHeader.slice(7)
+    : undefined;
 
-  let token: string | undefined;
-  let userId: string | undefined;
+  if (!token) return { req, res };
 
-  if (authHeader.startsWith('Bearer ')) {
-    token = authHeader.substring('Bearer '.length);
-    try {
-      const decodedToken = jwtService.verify(token);
-      userId = decodedToken?.id;
-    } catch (error) {
-      console.error('Error verifying token:', error);
-    }
-  }
+  const payload = jwtService.verify(token);
 
-  return { userId, token, req, res };
+  if (!payload) return { req, res };
+
+  const userExists = await prismaClient.user.findUnique({
+    where: { id: payload.id },
+    select: { id: true } // só busca o necessário, mais leve
+  });
+
+  if (!userExists) return { req, res };
+
+  return { userId: payload.id, token, req, res };
 };
 
 export { buildContext };
