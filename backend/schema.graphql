@@ -19,8 +19,12 @@ input LoginInput {
   password: String!
 }
 
+type LoginOutput {
+  accessToken: String!
+}
+
 type Mutation {
-  login(data: LoginInput!): String!
+  login(data: LoginInput!): LoginOutput!
   userCreate(data: CreateUserInput!): UserModel!
   userDelete(id: String!): UserModel!
   userUpdate(data: UpdateUserInput!, id: String!): UserModel!

@@ -18,7 +18,9 @@ describe('AuthResolver (integration)', () => {
     const response = await client.post('/graphql').send({
       query: `
         mutation Login($data: LoginInput!) {
-          login(data: $data)
+          login(data: $data) {
+            accessToken
+          }
         }
       `,
       variables: {
@@ -27,7 +29,12 @@ describe('AuthResolver (integration)', () => {
     });
 
     expect(response.status).toBe(200);
-    expect(response.body.data.login).toBe('Hello World');
+
+    expect(response.body.data.login).toStrictEqual(
+      expect.objectContaining({
+        accessToken: expect.any(String)
+      })
+    );
   });
 
   it('deve lançar erro quando o usuário não existe', async () => {
@@ -36,7 +43,9 @@ describe('AuthResolver (integration)', () => {
     const response = await client.post('/graphql').send({
       query: `
         mutation Login($data: LoginInput!) {
-          login(data: $data)
+          login(data: $data) {
+            accessToken
+          }
         }
       `,
       variables: {
@@ -59,7 +68,9 @@ describe('AuthResolver (integration)', () => {
     const response = await client.post('/graphql').send({
       query: `
         mutation Login($data: LoginInput!) {
-          login(data: $data)
+          login(data: $data) {
+            accessToken
+          }
         }
       `,
       variables: {
@@ -79,7 +90,12 @@ describe('AuthResolver (integration)', () => {
       const client = await createTestClient();
 
       const response = await client.post('/graphql').send({
-        query: `mutation Login($data: LoginInput!) { login(data: $data) }`,
+        query: `
+          mutation Login($data: LoginInput!) { 
+            login(data: $data) {
+            accessToken
+          }
+        }`,
         variables: {
           data: { email: 'inexistente@teste.com', password: '123456' }
         }
@@ -99,7 +115,12 @@ describe('AuthResolver (integration)', () => {
       const client = await createTestClient();
 
       const response = await client.post('/graphql').send({
-        query: `mutation Login($data: LoginInput!) { login(data: $data) }`,
+        query: `
+        mutation Login($data: LoginInput!) { 
+          login(data: $data) {
+            accessToken
+          }
+        }`,
         variables: { data: { email: 'qualquer@teste.com', password: '123456' } }
       });
 
@@ -119,7 +140,11 @@ describe('AuthResolver (integration)', () => {
       const client = await createTestClient();
 
       const response = await client.post('/graphql').send({
-        query: `mutation Login($data: LoginInput!) { login(data: $data) }`,
+        query: `mutation Login($data: LoginInput!) {
+         login(data: $data) {
+          accessToken
+          }
+         }`,
         variables: {
           data: { email: 'inexistente@teste.com', password: '123456' }
         }

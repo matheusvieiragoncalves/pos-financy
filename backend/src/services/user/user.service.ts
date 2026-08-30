@@ -1,4 +1,5 @@
 import { CreateUserInput, UpdateUserInput } from '@/dtos/input/user.input';
+import { BadRequestError } from '@/errors/bad-request';
 import { UserModel } from '@/models/user.model.js';
 import { prismaClient } from '../../../prisma/prisma';
 import { PasswordService } from '../password/password.service';
@@ -14,7 +15,7 @@ export class UserService implements IUserService {
     const user = await prismaClient.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new BadRequestError('User not found');
     }
 
     return user;
@@ -34,7 +35,7 @@ export class UserService implements IUserService {
     const user = await this.findByEmail(email);
 
     if (user) {
-      throw new Error('User already exists');
+      throw new BadRequestError('User already exists');
     }
 
     const hashedPassword = await this.passwordService.hash(password);
@@ -54,7 +55,7 @@ export class UserService implements IUserService {
     const user = await this._findById(id);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new BadRequestError('User not found');
     }
 
     return await prismaClient.user.update({
@@ -67,7 +68,7 @@ export class UserService implements IUserService {
     const user = await this._findById(id);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new BadRequestError('User not found');
     }
 
     const deletedUser = await prismaClient.user.delete({ where: { id } });

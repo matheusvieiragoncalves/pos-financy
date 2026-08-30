@@ -1,5 +1,6 @@
 // backend/src/resolvers/auth/auth.resolver.ts
 import { LoginInput } from '@/dtos/input/auth.input';
+import { LoginOutput } from '@/dtos/output/auth.output';
 import { UnauthorizedError } from '@/errors/unauthorized-error';
 import { JwtService } from '@/services/jwt/jwt.service';
 import { IJwtService } from '@/services/jwt/jwt.service.interface';
@@ -17,10 +18,10 @@ export class AuthResolver {
     private readonly jwtService: IJwtService = new JwtService()
   ) {}
 
-  @Mutation(() => String)
+  @Mutation(() => LoginOutput)
   async login(
     @Arg('data', () => LoginInput) data: LoginInput
-  ): Promise<string> {
+  ): Promise<LoginOutput> {
     const { email, password } = data;
 
     const user = await this.userService.findByEmail(email);

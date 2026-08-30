@@ -1,10 +1,13 @@
+import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
+const env = loadEnv('test', process.cwd(), '');
 
 export default defineConfig({
   resolve: {
     tsconfigPaths: true
   },
   test: {
+    env,
     globals: true,
     environment: 'node',
     setupFiles: ['./vitest.setup.ts'],
@@ -23,7 +26,7 @@ export default defineConfig({
           name: 'integration',
           include: ['src/**/*.integration.test.ts'],
           setupFiles: ['./src/test/setup-integration.ts'],
-          env: { DATABASE_URL: 'file:./test.db' }
+          fileParallelism: false
         }
       }
     ]

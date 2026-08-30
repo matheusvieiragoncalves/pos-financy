@@ -27,7 +27,11 @@ describe('AuthResolver (unit)', () => {
       password: '123456'
     });
 
-    expect(result).toBe('Hello World');
+    expect(result).toStrictEqual(
+      expect.objectContaining({
+        accessToken: expect.any(String)
+      })
+    );
   });
 
   it('deve rejeitar quando o usuário não existe', async () => {

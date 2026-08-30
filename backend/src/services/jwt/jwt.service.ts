@@ -17,10 +17,12 @@ export class JwtService implements IJwtService {
     this.expiresIn = process.env.JWT_EXPIRES_IN ?? '1d';
   }
 
-  sign(payload: IJwtPayload): string {
-    return jwt.sign(payload, this.secret, {
+  sign(payload: IJwtPayload): { accessToken: string } {
+    const accessToken = jwt.sign(payload, this.secret, {
       expiresIn: this.expiresIn
     } as jwt.SignOptions);
+
+    return { accessToken };
   }
 
   verify(token: string): IJwtPayload | null {

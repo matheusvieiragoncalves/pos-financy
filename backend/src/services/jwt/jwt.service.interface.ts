@@ -4,6 +4,6 @@ export interface IJwtPayload {
 }
 
 export interface IJwtService {
-  sign(payload: IJwtPayload): string;
+  sign(payload: IJwtPayload): { accessToken: string };
   verify(token: string): IJwtPayload | null;
 }

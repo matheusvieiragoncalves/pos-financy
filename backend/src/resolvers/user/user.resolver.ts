@@ -1,3 +1,4 @@
+import { Public } from '@/decorators/public.decorator';
 import { CreateUserInput, UpdateUserInput } from '@/dtos/input/user.input';
 import { isAuthenticated } from '@/middlewares/auth.middleware';
 import { UserModel } from '@/models/user.model';
@@ -6,15 +7,16 @@ import { IUserService } from '@/services/user/user.service.interface';
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 
 @Resolver()
+@UseMiddleware(isAuthenticated)
 export class UserResolver {
   constructor(private readonly userService: IUserService = new UserService()) {}
 
   @Query(() => [UserModel])
-  @UseMiddleware(isAuthenticated)
   async users(): Promise<UserModel[]> {
     return this.userService.findAll();
   }
 
+  @Public()
   @Mutation(() => UserModel)
   async userCreate(
     @Arg('data', () => CreateUserInput) data: CreateUserInput
