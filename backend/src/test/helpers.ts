@@ -1,5 +1,7 @@
 import { createApp } from '@/app';
+import { CategoryColorEnum, CategoryIconEnum } from '@/enums';
 import { UserModel } from '@/models/user.model';
+import { CategoryService } from '@/services/category/category.service';
 import { JwtService } from '@/services/jwt/jwt.service';
 import { PasswordService } from '@/services/password/password.service';
 import { UserService } from '@/services/user/user.service';
@@ -74,4 +76,22 @@ export async function createTestUser(overrides?: {
     password: overrides?.password ?? '123456'
   });
   return { user };
+}
+
+export async function createTestCategory(overrides?: {
+  title?: string;
+  description?: string;
+  color?: string;
+  icon?: string;
+}): Promise<{ category: any }> {
+  const categoryService = new CategoryService();
+
+  const category = await categoryService.create({
+    title: overrides?.title ?? 'Categoria de Teste',
+    description: overrides?.description ?? 'Descrição da categoria de teste',
+    color: (overrides?.color ?? CategoryColorEnum.GREEN) as CategoryColorEnum,
+    icon: (overrides?.icon ?? CategoryIconEnum.HOUSE) as CategoryIconEnum
+  });
+
+  return { category };
 }

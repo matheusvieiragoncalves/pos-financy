@@ -9,6 +9,7 @@ import { expressMiddleware } from '@as-integrations/express5';
 import { AppError } from './errors/app-error';
 import { buildContext } from './graphql/context';
 import { AuthResolver } from './resolvers/auth/auth.resolver';
+import { CategoryResolver } from './resolvers/category/category.resolver';
 import { UserResolver } from './resolvers/user/user.resolver';
 
 export async function createApp() {
@@ -17,9 +18,9 @@ export async function createApp() {
   app.use(cors({ origin: '*', credentials: true }));
 
   const schema = await buildSchema({
-    resolvers: [AuthResolver, UserResolver],
-    validate: false,
-    emitSchemaFile: './schema.graphql'
+    resolvers: [AuthResolver, UserResolver, CategoryResolver],
+    emitSchemaFile: './schema.graphql',
+    validate: true
   });
 
   const server = new ApolloServer({
@@ -33,7 +34,7 @@ export async function createApp() {
 
       const isProd = process.env.NODE_ENV === 'production';
 
-      if (!isAppError || isProd) {
+      if (!isAppError) {
         return {
           message: 'Erro interno do servidor',
           extensions: {

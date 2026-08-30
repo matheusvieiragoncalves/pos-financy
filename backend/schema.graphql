@@ -3,6 +3,53 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+enum CategoryColorEnum {
+  BLUE
+  GREEN
+  ORANGE
+  PINK
+  PURPLE
+  RED
+  YELLOW
+}
+
+enum CategoryIconEnum {
+  BAGGAGE_CLAIM
+  BOOK_OPEN
+  BRIEFCASE_BUSINESS
+  CAR_FRONT
+  DUMBBELL
+  GIFT
+  HEART_PULSE
+  HOUSE
+  MAILBOX
+  PAW_PRINT
+  PIGGY_BANK
+  RECEIPT_TEXT
+  SHOPPING_CART
+  TICKET
+  TOOL_CASE
+  UTENSILS
+}
+
+type CategoryModel {
+  color: CategoryColorEnum!
+  createdAt: DateTimeISO!
+  description: String!
+  hexColor: String!
+  icon: CategoryIconEnum!
+  id: ID!
+  title: String!
+  updatedAt: DateTimeISO!
+}
+
+input CreateCategoryInput {
+  color: CategoryColorEnum!
+  description: String!
+  icon: CategoryIconEnum!
+  title: String!
+}
+
 input CreateUserInput {
   email: String!
   name: String!
@@ -24,6 +71,9 @@ type LoginOutput {
 }
 
 type Mutation {
+  categoryCreate(data: CreateCategoryInput!): CategoryModel!
+  categoryDelete(id: String!): CategoryModel!
+  categoryUpdate(data: UpdateCategoryInput!, id: String!): CategoryModel!
   login(data: LoginInput!): LoginOutput!
   userCreate(data: CreateUserInput!): UserModel!
   userDelete(id: String!): UserModel!
@@ -31,7 +81,15 @@ type Mutation {
 }
 
 type Query {
+  categories: [CategoryModel!]!
   users: [UserModel!]!
+}
+
+input UpdateCategoryInput {
+  color: CategoryColorEnum
+  description: String
+  icon: CategoryIconEnum
+  title: String
 }
 
 input UpdateUserInput {
