@@ -17,15 +17,15 @@
 
 ## Requisitos não funcionais:
 
-[] Typescript
-[] React
-[] Vite sem framework
+[x] Typescript
+[x] React
+[x] Vite sem framework
 [] GraphQL
 
 É flexível o uso de:
 
-[] TailwindCSS
-[] Shadcn
+[x] TailwindCSS
+[x] Shadcn
 [] React Query
 [] React Hook Form
 [] Zod
