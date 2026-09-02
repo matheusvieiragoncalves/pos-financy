@@ -8,12 +8,13 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { toast } from "@/components/ui/toast"
-import { UserRoundPlus } from "lucide-react"
+import { LogInIcon } from "lucide-react"
 
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
-export function LoginPage() {
+export function SignUpPage() {
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -50,14 +51,28 @@ export function LoginPage() {
       <Card className="w-full max-w-md rounded-xl px-2 py-8">
         <CardHeader>
           <CardTitle className="text-center text-xl font-bold">
-            Fazer login
+            Criar conta
           </CardTitle>
           <CardDescription className="text-center text-base font-normal text-gray-600">
-            Entre na sua conta para continuar
+            Comece a controlar suas finanças ainda hoje
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="name" className="text-sm">
+                Nome completo
+              </label>
+              <input
+                id="name"
+                type="text"
+                placeholder="Seu nome completo"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="focus:ring-opacity-50 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
+              />
+            </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="email" className="text-sm">
                 E-mail
@@ -85,13 +100,9 @@ export function LoginPage() {
                 required
                 className="focus:ring-opacity-50 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
               />
-            </div>
-            <div className="flex flex-row justify-between">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" />
-                Lembrar-me
-              </label>
-              <Link to="/recover-password">Recuperar senha</Link>
+              <span className="text-xs text-gray-500">
+                A senha deve ter no mínimo 8 caracteres
+              </span>
             </div>
 
             <Button
@@ -99,28 +110,30 @@ export function LoginPage() {
               className="w-full bg-brand-base py-6 text-base hover:bg-brand-dark"
               disabled={loading}
             >
-              Entrar
+              Cadastrar
             </Button>
           </form>
 
           <div className="my-6 flex items-center gap-2">
             <hr className="flex-1" />
-            <span className="px-2">ou</span>
+            <span className="px-2 text-gray-500">ou</span>
             <hr className="flex-1" />
           </div>
 
-          <p className="mb-4 text-center">Ainda não tem uma conta?</p>
+          <p className="mb-4 text-center text-sm font-normal text-gray-600">
+            Já tem uma conta?
+          </p>
 
           <Button
             variant={"outline"}
             className="w-full bg-transparent py-6 text-base"
           >
             <Link
-              to="/sign-up"
-              className="flex flex-1 items-center justify-center gap-2"
+              to="/"
+              className="flex flex-1 items-center justify-center gap-2 text-gray-700"
             >
-              <UserRoundPlus />
-              Criar conta
+              <LogInIcon />
+              Fazer login
             </Link>
           </Button>
         </CardContent>

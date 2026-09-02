@@ -1,6 +1,7 @@
 import { Layout } from "@/components/Layout"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { LoginPage } from "./pages/auth/Login"
+import { SignUpPage } from "./pages/auth/SignUp"
 
 // function ProtectedRoute({ children }: { children: React.ReactNode }) {
 //   const { isAuthenticated } = { isAuthenticated: true }
@@ -21,6 +22,14 @@ export function App() {
           element={
             <PublicRoute>
               <LoginPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/sign-up"
+          element={
+            <PublicRoute>
+              <SignUpPage />
             </PublicRoute>
           }
         />

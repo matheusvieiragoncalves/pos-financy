@@ -7,7 +7,7 @@ interface ILayoutProps {
 
 const Layout = ({ children }: ILayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-200">
+    <div className="min-h-screen bg-gray-100">
       <Header />
       <main className="mx-auto px-16 py-4">{children}</main>
       <Toaster />
