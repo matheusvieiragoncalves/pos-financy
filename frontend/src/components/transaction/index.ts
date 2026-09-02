@@ -1,0 +1,1 @@
+export { TransactionTitle } from "./TransactionTitle"

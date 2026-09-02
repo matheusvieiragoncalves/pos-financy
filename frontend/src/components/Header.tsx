@@ -5,7 +5,7 @@ import { Button } from "./ui/button"
 
 export function Header() {
   const location = useLocation()
-  const isAuthenticated = false
+  const isAuthenticated = true
 
   const user = { name: "Matheus" }
 
@@ -18,34 +18,36 @@ export function Header() {
   return !isAuthenticated ? (
     <></>
   ) : (
-    <div className="w-full px-16 pt-6">
-      <header className="flex w-full justify-between">
-        <div>
-          <img src={logoIcon} alt="Logo" />
-        </div>
-        <div className="flex items-center gap-4">
-          {menuOptions.map((item) => (
-            <Link key={item.name} to={item.path}>
-              <Button
-                size="sm"
-                className="gap-2"
-                variant={"link"}
-                // Todo: Ajustar cor
-                style={location.pathname === item.path ? { color: "red" } : {}}
-              >
-                {item.name}
-              </Button>
-            </Link>
-          ))}
-        </div>
-        <div className="flex items-center">
+    <header className="flex w-full items-center justify-between bg-white px-12 py-5.5">
+      <div>
+        <img src={logoIcon} alt="Logo" />
+      </div>
+      <div className="flex items-center gap-5">
+        {menuOptions.map((item) => (
+          <Link key={item.name} to={item.path}>
+            <Button
+              size="sm"
+              className={
+                location.pathname === item.path
+                  ? "gap-2 text-sm font-semibold text-brand-base hover:no-underline"
+                  : "gap-2 text-sm font-semibold hover:no-underline"
+              }
+              variant={"link"}
+            >
+              {item.name}
+            </Button>
+          </Link>
+        ))}
+      </div>
+      <div className="flex items-center">
+        <Link to="/profile">
           <Avatar>
-            <AvatarFallback className="bg-zinc-950 text-primary-foreground">
+            <AvatarFallback className="text-ms bg-gray-300 text-gray-800">
               {user?.name?.charAt(0).toUpperCase() || "U"}
             </AvatarFallback>
           </Avatar>
-        </div>
-      </header>
-    </div>
+        </Link>
+      </div>
+    </header>
   )
 }
