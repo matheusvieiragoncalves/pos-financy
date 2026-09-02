@@ -9,6 +9,7 @@ import { Category } from "@/models/category.model"
 import { Transaction } from "@/models/transaction.model"
 import { User } from "@/models/user.model"
 import { AmountCard } from "./components/AmountCard"
+import { CategoryList } from "./components/CategoryList"
 import { TransactionList } from "./components/TransactionList"
 
 export function DashboardPage() {
@@ -38,6 +39,8 @@ export function DashboardPage() {
     createdAt: new Date(),
     updatedAt: new Date(),
     icon: CategoryIconEnum.BAGGAGE_CLAIM,
+    numberTransactions: 12,
+    totalAmountTransactions: 500,
   })
 
   const user: User = new User({
@@ -63,14 +66,14 @@ export function DashboardPage() {
   )
 
   return (
-    <div className="grid h-[88vh] flex-1 grid-cols-3 grid-rows-[auto_1fr] gap-6">
+    <div className="grid flex-1 grid-cols-3 grid-rows-[auto_1fr] items-start gap-6">
       {amounts.map((item, index) => (
         <AmountCard key={index} amount={item} />
       ))}
 
       <TransactionList className="col-span-2" transactions={transactionList} />
 
-      {/* <CategoryList categories={transactionList} /> */}
+      <CategoryList categories={[category]} />
     </div>
   )
 }
