@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { toast } from "@/components/ui/toast"
+import { useAuthStore } from "@/stores/auth"
 import { UserRoundPlus } from "lucide-react"
 
 import { useState } from "react"
@@ -18,13 +19,15 @@ export function LoginPage() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
+  const login = useAuthStore((state) => state.login)
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
 
     setLoading(true)
 
     try {
-      const loginMutation = "fake data"
+      const loginMutation = await login({ email, password })
 
       if (loginMutation) {
         toast.add({
@@ -33,11 +36,13 @@ export function LoginPage() {
         })
       }
     } catch (error) {
-      toast.add({
-        title: "Erro ao fazer login. Por favor, tente novamente.",
-        type: "error",
-      })
-      console.error(error)
+      let message = "Erro ao fazer login. Por favor, tente novamente."
+
+      if (error instanceof Error && !!error?.message) {
+        message = error.message
+      }
+
+      toast.add({ title: message, type: "error" })
     } finally {
       setLoading(false)
     }

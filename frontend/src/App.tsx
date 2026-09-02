@@ -3,14 +3,16 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { LoginPage } from "./pages/auth/Login"
 import { SignUpPage } from "./pages/auth/SignUp"
 import { DashboardPage } from "./pages/dashboard"
-
-const isAuthenticated = true
+import { useAuthStore } from "./stores/auth"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuthStore()
+  console.log({ isAuthenticated })
   return isAuthenticated ? children : <Navigate to="/login" replace />
 }
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuthStore()
   return !isAuthenticated ? children : <Navigate to="/" replace />
 }
 

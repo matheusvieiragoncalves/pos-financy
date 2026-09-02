@@ -38,6 +38,6 @@ export class Transaction {
     Object.assign(this, attrs)
 
     this.user = new User(attrs?.user)
-    this.category = new Category(attrs?.category) //TODO verificar depois
+    this.category = new Category({ ...attrs?.category })
   }
 }

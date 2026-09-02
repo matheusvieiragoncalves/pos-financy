@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/stores/auth"
 import { Link, useLocation } from "react-router-dom"
 import logoIcon from "../assets/logo-icon.svg"
 import { Avatar, AvatarFallback } from "./ui/avatar"
@@ -5,7 +6,7 @@ import { Button } from "./ui/button"
 
 export function Header() {
   const location = useLocation()
-  const isAuthenticated = true
+  const { isAuthenticated } = useAuthStore()
 
   const user = { name: "Matheus" }
 

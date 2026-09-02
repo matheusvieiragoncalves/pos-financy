@@ -10,7 +10,7 @@ const Layout = ({ children }: ILayoutProps) => {
     <div className="min-h-screen bg-gray-100">
       <Header />
       <main className="mx-auto px-16 py-4">{children}</main>
-      <Toaster />
+      <Toaster timeout={3000} />
     </div>
   )
 }
