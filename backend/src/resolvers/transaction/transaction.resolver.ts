@@ -4,16 +4,28 @@ import {
   UpdateTransactionInput
 } from '@/dtos/input/transaction.input';
 import { isAuthenticated } from '@/middlewares/auth.middleware';
+import { CategoryModel } from '@/models/category.model';
 import { TransactionModel } from '@/models/transaction.model';
+import { CategoryService } from '@/services/category/category.service';
+import { ICategoryService } from '@/services/category/category.service.interface';
 import { TransactionService } from '@/services/transaction/transaction.service';
 import { ITransactionService } from '@/services/transaction/transaction.service.interface';
-import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
+import {
+  Arg,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+  UseMiddleware
+} from 'type-graphql';
 
 @Resolver(() => TransactionModel)
 @UseMiddleware(isAuthenticated)
 export class TransactionResolver {
   constructor(
-    private readonly transactionService: ITransactionService = new TransactionService()
+    private readonly transactionService: ITransactionService = new TransactionService(),
+    private readonly categoryService: ICategoryService = new CategoryService()
   ) {}
 
   @Query(() => [TransactionModel])
@@ -46,5 +58,12 @@ export class TransactionResolver {
     @CurrentUserId() currentUserId: string
   ): Promise<TransactionModel> {
     return this.transactionService.delete(transactionId, currentUserId);
+  }
+
+  @FieldResolver(() => CategoryModel)
+  async category(
+    @Root() transaction: TransactionModel
+  ): Promise<CategoryModel | null> {
+    return this.categoryService.findById(transaction.categoryId);
   }
 }

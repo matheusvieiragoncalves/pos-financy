@@ -19,9 +19,7 @@ export function AmountCard({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-[28px] font-bold text-gray-800">
-          R$ {formattedAmount}
-        </p>
+        <p className="text-[28px] font-bold text-gray-800">{formattedAmount}</p>
       </CardContent>
     </Card>
   )

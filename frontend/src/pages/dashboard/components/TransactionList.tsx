@@ -39,7 +39,7 @@ export function TransactionList({
           {transactions.map((item) => {
             const {
               description,
-              date,
+              formattedDate,
               type,
               formattedAmount,
               category: { color, Icon, title },
@@ -53,7 +53,7 @@ export function TransactionList({
                 <TransactionTitle
                   Icon={Icon}
                   color={color}
-                  date={date}
+                  formattedDate={formattedDate}
                   description={description}
                   showDate
                 />
@@ -62,6 +62,7 @@ export function TransactionList({
 
                 <TransactionAmount
                   formattedAmount={formattedAmount}
+                  color={color}
                   type={type}
                 />
               </div>

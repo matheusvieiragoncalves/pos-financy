@@ -2,14 +2,17 @@ import type { Category } from "@/models/category.model"
 import type { Transaction } from "@/models/transaction.model"
 import { CategoryIconTag } from "../category"
 
-type TTransactionTitleProps = Pick<Transaction, "description" | "date"> &
+type TTransactionTitleProps = Pick<
+  Transaction,
+  "description" | "formattedDate"
+> &
   Pick<Category, "color" | "Icon"> & {
     showDate?: boolean
   }
 
 export function TransactionTitle({
   description,
-  date,
+  formattedDate,
   color,
   Icon,
   showDate = false,
@@ -20,9 +23,9 @@ export function TransactionTitle({
 
       <div className="flex flex-col gap-0.5">
         <p className="text-base font-medium text-gray-800">{description}</p>
-        {showDate && date && (
+        {showDate && formattedDate && (
           <span className="text-sm font-light text-gray-600">
-            {date.toLocaleDateString()}
+            {formattedDate}
           </span>
         )}
       </div>

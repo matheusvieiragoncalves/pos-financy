@@ -1,15 +1,8 @@
-import {
-  CategoryColorEnum,
-  CategoryIconEnum,
-  TransactionTypeEnum,
-} from "@/enums"
 import { AmountTypeEnum } from "@/enums/amount-type.enum"
 import { Amount } from "@/models/amount.model"
-import { Category } from "@/models/category.model"
-import { Transaction } from "@/models/transaction.model"
-import { User } from "@/models/user.model"
+import { useTransactions } from "@/stores/transactions"
+import { useEffect } from "react"
 import { AmountCard } from "./components/AmountCard"
-import { CategoryList } from "./components/CategoryList"
 import { TransactionList } from "./components/TransactionList"
 
 export function DashboardPage() {
@@ -31,39 +24,12 @@ export function DashboardPage() {
     }),
   ]
 
-  const category = new Category({
-    id: "cat1",
-    title: "Alimentação",
-    color: CategoryColorEnum.BLUE,
-    description: "Categoria de alimentação",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    icon: CategoryIconEnum.BAGGAGE_CLAIM,
-    numberTransactions: 12,
-    totalAmountTransactions: 500,
-  })
+  const transactions = useTransactions((state) => state.transactions)
+  const fetchTransactions = useTransactions((state) => state.fetchTransactions)
 
-  const user: User = new User({
-    id: "user1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  })
-
-  const transactionList: Transaction[] = Array(4).fill(
-    new Transaction({
-      id: "aaa",
-      description: "Compra no supermercado",
-      amount: 200,
-      type: TransactionTypeEnum.OUT,
-      date: new Date(),
-      category: category,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      user: user,
-    })
-  )
+  useEffect(() => {
+    fetchTransactions()
+  }, [])
 
   return (
     <div className="grid flex-1 grid-cols-3 grid-rows-[auto_1fr] items-start gap-6">
@@ -71,9 +37,12 @@ export function DashboardPage() {
         <AmountCard key={index} amount={item} />
       ))}
 
-      <TransactionList className="col-span-2" transactions={transactionList} />
+      <TransactionList
+        className="col-span-2"
+        transactions={Array.from(transactions.values())}
+      />
 
-      <CategoryList categories={[category]} />
+      {/* <CategoryList categories={[category]} /> */}
     </div>
   )
 }

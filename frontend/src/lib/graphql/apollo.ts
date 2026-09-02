@@ -13,7 +13,7 @@ const httpLink = new HttpLink({
 })
 
 const authLink = new SetContextLink(({ headers }) => {
-  const token = useAuthStore.getState().token
+  const token = useAuthStore.getState().accessToken
   return {
     headers: {
       ...headers,
