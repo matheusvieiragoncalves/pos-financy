@@ -6,7 +6,10 @@ import { enableMapSet } from "immer"
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
 
-type TLinksState = {
+type TTransactionsState = {
+  totalIn: number
+  totalOut: number
+  total: number
   transactions: Map<string, Transaction>
   isLoading: boolean
   fetchTransactions: () => void
@@ -14,7 +17,10 @@ type TLinksState = {
 
 enableMapSet()
 
-export const useTransactions = create<TLinksState, [["zustand/immer", never]]>(
+export const useTransactions = create<
+  TTransactionsState,
+  [["zustand/immer", never]]
+>(
   immer((set) => {
     async function fetchTransactions() {
       set((state) => {
@@ -41,6 +47,9 @@ export const useTransactions = create<TLinksState, [["zustand/immer", never]]>(
             state.transactions.set(item.id.toString(), new Transaction(item))
           })
           state.isLoading = false
+          state.totalIn = response?.data?.transactionTotal?.totalIn ?? 0
+          state.totalOut = response?.data?.transactionTotal?.totalOut ?? 0
+          state.total = response?.data?.transactionTotal?.total ?? 0
         })
       } catch {
         set((state) => {
@@ -53,6 +62,9 @@ export const useTransactions = create<TLinksState, [["zustand/immer", never]]>(
     }
 
     return {
+      totalIn: 0,
+      totalOut: 0,
+      total: 0,
       transactions: new Map(),
       isLoading: false,
       fetchTransactions,

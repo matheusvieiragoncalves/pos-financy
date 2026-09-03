@@ -93,6 +93,7 @@ type Mutation {
 
 type Query {
   categories: [CategoryModel!]!
+  transactionTotal: TransactionsTotalOutput!
   transactions: [TransactionModel!]!
   users: [UserModel!]!
 }
@@ -114,6 +115,12 @@ type TransactionModel {
 enum TransactionTypeEnum {
   IN
   OUT
+}
+
+type TransactionsTotalOutput {
+  total: Float!
+  totalIn: Float!
+  totalOut: Float!
 }
 
 input UpdateCategoryInput {

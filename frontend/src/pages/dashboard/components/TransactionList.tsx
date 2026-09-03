@@ -42,7 +42,7 @@ export function TransactionList({
               formattedDate,
               type,
               formattedAmount,
-              category: { color, Icon, title },
+              category: { colorCSS, Icon, title },
             } = item
 
             return (
@@ -52,17 +52,16 @@ export function TransactionList({
               >
                 <TransactionTitle
                   Icon={Icon}
-                  color={color}
+                  colorCSS={colorCSS}
                   formattedDate={formattedDate}
                   description={description}
                   showDate
                 />
 
-                <CategoryTitleTag title={title} color={color} />
+                <CategoryTitleTag title={title} colorCSS={colorCSS} />
 
                 <TransactionAmount
                   formattedAmount={formattedAmount}
-                  color={color}
                   type={type}
                 />
               </div>

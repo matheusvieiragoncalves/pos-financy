@@ -36,7 +36,7 @@ export function CategoryList({ categories, className }: ICategoryListProps) {
               title,
               totalAmountTransactionsFormatted,
               numberTransactions,
-              color,
+              colorCSS,
             }) => {
               return (
                 <div
@@ -45,7 +45,7 @@ export function CategoryList({ categories, className }: ICategoryListProps) {
                 >
                   <CategoryTitleTag
                     title={title}
-                    color={color}
+                    colorCSS={colorCSS}
                     className="mr-auto"
                   />
 

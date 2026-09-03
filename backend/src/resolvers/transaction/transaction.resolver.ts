@@ -3,6 +3,7 @@ import {
   CreateTransactionInput,
   UpdateTransactionInput
 } from '@/dtos/input/transaction.input';
+import { TransactionsTotalOutput } from '@/dtos/output/total.output';
 import { isAuthenticated } from '@/middlewares/auth.middleware';
 import { CategoryModel } from '@/models/category.model';
 import { TransactionModel } from '@/models/transaction.model';
@@ -58,6 +59,13 @@ export class TransactionResolver {
     @CurrentUserId() currentUserId: string
   ): Promise<TransactionModel> {
     return this.transactionService.delete(transactionId, currentUserId);
+  }
+
+  @Query(() => TransactionsTotalOutput)
+  async transactionTotal(
+    @CurrentUserId() currentUserId: string
+  ): Promise<TransactionsTotalOutput> {
+    return this.transactionService.calculeTotal(currentUserId);
   }
 
   @FieldResolver(() => CategoryModel)

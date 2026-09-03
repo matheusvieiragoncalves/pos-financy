@@ -4,6 +4,7 @@ import {
   CreateTransactionInput,
   UpdateTransactionInput
 } from '@/dtos/input/transaction.input';
+import { TransactionsTotalOutput } from '@/dtos/output/total.output';
 import { TransactionTypeEnum } from '@/enums';
 import { NotFoundError } from '@/errors/not-found-error';
 import { UnauthorizedError } from '@/errors/unauthorized-error';
@@ -53,8 +54,6 @@ export class TransactionService implements ITransactionService {
     const { categoryId } = data;
 
     await this.categoryService.findById(categoryId);
-
-    console.log('Creating transaction with data:', userId);
 
     const transaction = await prismaClient.transaction.create({
       data: { ...data, userId }
@@ -119,5 +118,23 @@ export class TransactionService implements ITransactionService {
     ) {
       throw new Error(`Tipo inválido encontrado no banco: ${type}`);
     }
+  }
+
+  async calculeTotal(userId: string): Promise<TransactionsTotalOutput> {
+    const result = await prismaClient.transaction.groupBy({
+      by: ['type'],
+      where: {
+        userId
+      },
+      _sum: {
+        amount: true
+      }
+    });
+
+    const totalIn = result.find((r) => r.type === 'IN')?._sum.amount ?? 0;
+    const totalOut = result.find((r) => r.type === 'OUT')?._sum.amount ?? 0;
+    const total = totalIn - totalOut;
+
+    return { totalIn, totalOut, total };
   }
 }

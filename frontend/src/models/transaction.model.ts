@@ -32,7 +32,7 @@ export class Transaction {
     Object.assign(this, attrs)
 
     this.user = new User(attrs?.user)
-    this.category = new Category({ ...attrs?.category })
+    this.category = new Category(attrs?.category)
 
     if (attrs?.date) {
       this.date =

@@ -1,17 +1,17 @@
 import type { Category } from "@/models/category.model"
 
-type TCategoryIconTagProps = Pick<Category, "color" | "Icon">
+type TCategoryIconTagProps = Pick<Category, "colorCSS" | "Icon">
 
-export function CategoryIconTag({ color, Icon }: TCategoryIconTagProps) {
-  if (!Icon || !color) {
+export function CategoryIconTag({ colorCSS, Icon }: TCategoryIconTagProps) {
+  if (!Icon || !colorCSS) {
     return <></>
   }
 
   return (
     <div
-      className={`flex h-10 w-10 items-center justify-center rounded-lg ${color.bg}`}
+      className={`flex h-10 w-10 items-center justify-center rounded-lg ${colorCSS.bg}`}
     >
-      <Icon className={`${color.text}`} />
+      <Icon className={`${colorCSS.text}`} />
     </div>
   )
 }

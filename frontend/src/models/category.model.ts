@@ -2,50 +2,35 @@ import { CategoryColorEnum, CategoryIconEnum } from "@/enums"
 import { CATEGORY_COLOR_MAP } from "@/enums/category-color.enum"
 import { CATEGORY_ICON_MAP } from "@/enums/category-icon.enum"
 import { formatMoney } from "@/utils/money-formatter"
-import type { LucideProps } from "lucide-react"
 
-type TCategoryAttrs = {
-  id?: string
-  title?: string
-  description?: string
-  createdAt?: Date
-  updatedAt?: Date
-  icon?: CategoryIconEnum
-  color?: CategoryColorEnum
-  numberTransactions?: number
-  totalAmountTransactions?: number
-}
+type TCategoryAttrs = Omit<
+  Category,
+  "Icon" | "colorCSS" | "totalAmountTransactionsFormatted"
+>
 
 export class Category {
-  id?: string
-  title?: string
-  description?: string
-  numberTransactions?: number
-  totalAmountTransactions?: number
+  id!: string
+  title!: string
+  description!: string
+  numberTransactions!: number
+  totalAmountTransactions!: number
+  color!: CategoryColorEnum
+  icon!: CategoryIconEnum
 
-  createdAt?: Date
-  updatedAt?: Date
-
-  private _icon!: React.ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
-  >
-  private _color!: CategoryColorEnum
+  createdAt!: Date
+  updatedAt!: Date
 
   get Icon() {
-    return this._icon
+    return CATEGORY_ICON_MAP[this.icon]
   }
 
-  get color(): { text: string; bg: string } {
-    const color = CATEGORY_COLOR_MAP[this._color]
+  get colorCSS(): { text: string; bg: string } {
+    if (!this.color) {
+      return { text: "text-gray-800", bg: "bg-gray-200" }
+    }
+
+    const color = CATEGORY_COLOR_MAP[this.color]
     return color
-  }
-
-  set icon(value: CategoryIconEnum) {
-    this._icon = CATEGORY_ICON_MAP[value]
-  }
-
-  set color(value: CategoryColorEnum) {
-    this._color = value
   }
 
   get totalAmountTransactionsFormatted() {

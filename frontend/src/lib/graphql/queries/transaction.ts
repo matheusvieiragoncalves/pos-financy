@@ -3,6 +3,11 @@ import { gql, type TypedDocumentNode } from "@apollo/client"
 
 interface IFindAllTransactionsQueryData {
   transactions: Transaction[]
+  transactionTotal: {
+    totalIn: number
+    totalOut: number
+    total: number
+  }
 }
 
 export const QUERY_FETCH_TRANSACTIONS: TypedDocumentNode<
@@ -26,6 +31,11 @@ export const QUERY_FETCH_TRANSACTIONS: TypedDocumentNode<
 
       createdAt
       updatedAt
+    }
+    transactionTotal {
+      totalIn
+      totalOut
+      total
     }
   }
 `

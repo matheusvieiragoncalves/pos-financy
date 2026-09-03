@@ -6,20 +6,20 @@ type TTransactionTitleProps = Pick<
   Transaction,
   "description" | "formattedDate"
 > &
-  Pick<Category, "color" | "Icon"> & {
+  Pick<Category, "colorCSS" | "Icon"> & {
     showDate?: boolean
   }
 
 export function TransactionTitle({
   description,
   formattedDate,
-  color,
+  colorCSS,
   Icon,
   showDate = false,
 }: TTransactionTitleProps) {
   return (
     <div className="flex flex-1 items-center gap-4">
-      <CategoryIconTag Icon={Icon} color={color} />
+      <CategoryIconTag Icon={Icon} colorCSS={colorCSS} />
 
       <div className="flex flex-col gap-0.5">
         <p className="text-base font-medium text-gray-800">{description}</p>

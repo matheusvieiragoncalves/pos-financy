@@ -2,6 +2,7 @@ import {
   CreateTransactionInput,
   UpdateTransactionInput
 } from '@/dtos/input/transaction.input';
+import { TTotalOutput } from '@/dtos/output/total.output';
 import { TransactionModel } from '@/models/transaction.model';
 
 export interface ITransactionService {
@@ -21,4 +22,5 @@ export interface ITransactionService {
     currentUserId: string
   ): Promise<TransactionModel>;
   findById(id: string): Promise<TransactionModel | null>;
+  calculeTotal(userId: string): Promise<TTotalOutput>;
 }
