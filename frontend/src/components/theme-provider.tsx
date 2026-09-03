@@ -84,14 +84,16 @@ export function ThemeProvider({
   disableTransitionOnChange = true,
   ...props
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = React.useState<Theme>(() => {
-    const storedTheme = localStorage.getItem(storageKey)
-    if (isTheme(storedTheme)) {
-      return storedTheme
-    }
+  // const [theme, setThemeState] = React.useState<Theme>(() => {
+  //   const storedTheme = localStorage.getItem(storageKey)
+  //   if (isTheme(storedTheme)) {
+  //     return storedTheme
+  //   }
 
-    return defaultTheme
-  })
+  //   return defaultTheme
+  // })
+
+  const [theme, setThemeState] = React.useState<Theme>("light")
 
   const setTheme = React.useCallback(
     (nextTheme: Theme) => {
@@ -141,6 +143,9 @@ export function ThemeProvider({
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // Temporarily disable the theme toggle with the "D" key
+      return
+
       if (event.repeat) {
         return
       }

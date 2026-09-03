@@ -5,6 +5,19 @@ import { User } from "./user.model"
 
 type TTransactionAttrs = Omit<Transaction, "formattedAmount" | "formattedDate">
 
+export type TTransactionValueToCreate = Omit<
+  Transaction,
+  | "id"
+  | "createdAt"
+  | "updatedAt"
+  | "category"
+  | "formattedAmount"
+  | "formattedDate"
+  | "user"
+> & {
+  categoryId: string
+}
+
 export class Transaction {
   id!: string
   amount!: number

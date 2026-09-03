@@ -7,7 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import type { Transaction } from "@/models/transaction.model"
 import { ChevronRight, Plus } from "lucide-react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
+import { CreateTransactionDialog } from "./TransactionDialog"
 
 interface ITransactionListProps {
   transactions: Transaction[]
@@ -18,6 +20,8 @@ export function TransactionList({
   transactions,
   className,
 }: ITransactionListProps) {
+  const [openDialog, setOpenDialog] = useState(false)
+
   return (
     <Card className={cn("w-full gap-0 pt-2 pb-0", className)}>
       <CardHeader className="border-b py-5">
@@ -69,12 +73,18 @@ export function TransactionList({
           })}
         </div>
         <div className="mt-auto flex justify-center border-t px-6 py-5">
-          <Button variant={"ghost"} className="text-sm text-brand-base">
+          <Button
+            variant={"ghost"}
+            className="text-sm text-brand-base"
+            onClick={() => setOpenDialog(true)}
+          >
             <Plus className="text-brand-base" />
             Nova transação
           </Button>
         </div>
       </CardContent>
+
+      <CreateTransactionDialog open={openDialog} onOpenChange={setOpenDialog} />
     </Card>
   )
 }

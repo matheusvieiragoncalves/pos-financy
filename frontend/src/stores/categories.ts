@@ -28,6 +28,7 @@ export const useCategories = create<
       try {
         const response = await apolloClient.query({
           query: QUERY_FETCH_CATEGORIES,
+          fetchPolicy: "no-cache",
         })
 
         if (!response?.data?.categories) {
