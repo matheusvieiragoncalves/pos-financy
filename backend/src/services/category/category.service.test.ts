@@ -33,13 +33,15 @@ describe('CategoryService (unit)', () => {
         color: CategoryColorEnum.GREEN
       };
 
+      const fakeUserId = '1';
+
       vi.mocked(prismaClient.category.findUnique).mockResolvedValue(null);
       vi.mocked(prismaClient.category.create).mockResolvedValue({
         id: '1',
         ...fakeCategory
       } as any);
 
-      const result = await service.create(fakeCategory);
+      const result = await service.create(fakeUserId, fakeCategory);
 
       expect(result).toStrictEqual(
         expect.objectContaining({
@@ -84,21 +86,26 @@ describe('CategoryService (unit)', () => {
     it('deve lançar erro se a categoria não existir', async () => {
       vi.mocked(prismaClient.category.findUnique).mockResolvedValue(null);
 
-      await expect(service.delete('id-inexistente')).rejects.toThrow(
-        'Category not found'
-      );
+      const fakeUserId = '1';
+
+      await expect(
+        service.delete('id-inexistente', fakeUserId)
+      ).rejects.toThrow('Category not found');
       expect(prismaClient.category.delete).not.toHaveBeenCalled();
     });
   });
 
   describe('update', () => {
     it('deve atualizar uma categoria existente', async () => {
+      const fakeUserId = '1';
+
       const fakeCategory = {
         id: '1',
         title: 'test',
         description: 'test description',
         icon: CategoryIconEnum.HOUSE,
-        color: CategoryColorEnum.GREEN
+        color: CategoryColorEnum.GREEN,
+        userId: fakeUserId
       };
 
       vi.mocked(prismaClient.category.findUnique).mockResolvedValue(
@@ -110,7 +117,9 @@ describe('CategoryService (unit)', () => {
         title: 'test Updated'
       } as any);
 
-      const result = await service.update('1', { title: 'test Updated' });
+      const result = await service.update('1', fakeUserId, {
+        title: 'test Updated'
+      });
 
       expect(result.title).toBe('test Updated');
       expect(prismaClient.category.update).toHaveBeenCalledWith({
@@ -120,10 +129,12 @@ describe('CategoryService (unit)', () => {
     });
 
     it('deve lançar erro se a categoria não existir', async () => {
+      const fakeUserId = '1';
+
       vi.mocked(prismaClient.category.findUnique).mockResolvedValue(null);
 
       await expect(
-        service.update('id-inexistente', { title: 'Test' })
+        service.update('id-inexistente', fakeUserId, { title: 'Test' })
       ).rejects.toThrow('Category not found');
 
       expect(prismaClient.category.update).not.toHaveBeenCalled();

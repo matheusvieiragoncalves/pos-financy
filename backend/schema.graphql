@@ -34,7 +34,7 @@ enum CategoryIconEnum {
 
 type CategoryModel {
   color: CategoryColorEnum!
-  countTransactions: Float!
+  countTransactions: Float
   createdAt: DateTimeISO!
   description: String!
   hexColor: String!
@@ -42,6 +42,8 @@ type CategoryModel {
   id: ID!
   title: String!
   updatedAt: DateTimeISO!
+  user: UserModel
+  userId: String!
 }
 
 input CreateCategoryInput {
@@ -94,7 +96,7 @@ type Mutation {
 
 type Query {
   categories: [CategoryModel!]!
-  categoryWithMostTransactions: CategoryModel!
+  categoryWithMostTransactions: CategoryModel
   transactionTotal: TransactionsTotalOutput!
   transactions: [TransactionModel!]!
   users: [UserModel!]!

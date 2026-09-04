@@ -6,9 +6,16 @@ import { CategoryModel } from '@/models/category.model';
 
 export interface ICategoryService {
   findAll(): Promise<CategoryModel[]>;
-  create(data: CreateCategoryInput): Promise<CategoryModel>;
-  update(id: string, data: UpdateCategoryInput): Promise<CategoryModel>;
-  delete(id: string): Promise<CategoryModel>;
+  findByUserId(id: string): Promise<CategoryModel[]>;
+  create(userId: string, data: CreateCategoryInput): Promise<CategoryModel>;
+  update(
+    id: string,
+    currentUserId: string,
+    data: UpdateCategoryInput
+  ): Promise<CategoryModel>;
+  delete(id: string, currentUserId: string): Promise<CategoryModel>;
   findById(id: string): Promise<CategoryModel | null>;
-  findCategoryWithMostTransactions(): Promise<CategoryModel>;
+  findCategoryWithMostTransactions(
+    currentUserId: string
+  ): Promise<CategoryModel | null>;
 }

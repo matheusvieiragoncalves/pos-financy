@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 
 export class FakeCategoryService implements ICategoryService {
   findAll = vi.fn();
+  findByUserId = vi.fn();
   create = vi.fn();
   update = vi.fn();
   delete = vi.fn();

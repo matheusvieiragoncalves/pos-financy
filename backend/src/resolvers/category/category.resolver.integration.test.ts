@@ -44,8 +44,9 @@ describe('CategoryResolver (integration)', () => {
   it('deve listar categorias via query CATEGORIES', async () => {
     const client = await createTestClient();
 
-    const { accessToken } = await createAuthenticatedTestUser();
-    await createTestCategory();
+    const { accessToken, user } = await createAuthenticatedTestUser();
+
+    await createTestCategory(user.id);
 
     const response = await client
       .post('/graphql')
@@ -73,8 +74,8 @@ describe('CategoryResolver (integration)', () => {
   it('deve atualizar uma categoria via mutation CATEGORY_UPDATE', async () => {
     const client = await createTestClient();
 
-    const { category } = await createTestCategory();
-    const { accessToken } = await createAuthenticatedTestUser();
+    const { accessToken, user } = await createAuthenticatedTestUser();
+    const { category } = await createTestCategory(user.id);
 
     const response = await client
       .post('/graphql')
@@ -107,9 +108,9 @@ describe('CategoryResolver (integration)', () => {
   it('deve deletar uma categoria via mutation CATEGORY_DELETE', async () => {
     const client = await createTestClient();
 
-    const { accessToken } = await createAuthenticatedTestUser();
+    const { accessToken, user } = await createAuthenticatedTestUser();
 
-    const { category } = await createTestCategory();
+    const { category } = await createTestCategory(user.id);
 
     const response = await client
       .post('/graphql')

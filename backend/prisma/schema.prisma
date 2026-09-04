@@ -22,6 +22,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   transactions Transaction[]
+  categories   Category[]
 
   @@map("users")
 }
@@ -51,6 +52,9 @@ model Category {
   description String
   icon        String
   color       String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

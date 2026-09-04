@@ -48,7 +48,7 @@ describe('TransactionResolver (integration)', () => {
     const client = await createTestClient();
 
     const { accessToken, user } = await createAuthenticatedTestUser();
-    const { category } = await createTestCategory();
+    const { category } = await createTestCategory(user.id);
 
     const response = await client
       .post('/graphql')

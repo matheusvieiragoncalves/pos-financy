@@ -85,15 +85,18 @@ export async function createTestUser(overrides?: {
   return { user };
 }
 
-export async function createTestCategory(overrides?: {
-  title?: string;
-  description?: string;
-  color?: string;
-  icon?: string;
-}): Promise<{ category: any }> {
+export async function createTestCategory(
+  currentUserId: string,
+  overrides?: {
+    title?: string;
+    description?: string;
+    color?: string;
+    icon?: string;
+  }
+): Promise<{ category: any }> {
   const categoryService = new CategoryService();
 
-  const category = await categoryService.create({
+  const category = await categoryService.create(currentUserId, {
     title: overrides?.title ?? 'Categoria de Teste',
     description: overrides?.description ?? 'Descrição da categoria de teste',
     color: (overrides?.color ?? CategoryColorEnum.GREEN) as CategoryColorEnum,
@@ -109,7 +112,9 @@ export async function createTestTransaction(
 ): Promise<{ transaction: TransactionModel }> {
   const categoryId =
     overrides?.categoryId ??
-    (await createTestCategory().then(({ category }) => category.id));
+    (await createTestCategory(currentUserId).then(
+      ({ category }) => category.id
+    ));
 
   const attributes: CreateTransactionInput = {
     amount: overrides?.amount ?? 100,

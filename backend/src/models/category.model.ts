@@ -7,6 +7,7 @@ import {
   ObjectType,
   registerEnumType
 } from 'type-graphql';
+import { UserModel } from './user.model';
 
 registerEnumType(CategoryIconEnum, { name: 'CategoryIconEnum' });
 registerEnumType(CategoryColorEnum, { name: 'CategoryColorEnum' });
@@ -30,6 +31,15 @@ export class CategoryModel {
 
   @Field(() => String) // Campo calculado, não armazenado
   hexColor!: string;
+
+  @Field(() => Number, { nullable: true }) // Campo calculado, não armazenado
+  countTransactions?: number;
+
+  @Field(() => UserModel, { nullable: true })
+  user?: UserModel;
+
+  @Field(() => String)
+  userId!: string;
 
   @Field(() => GraphQLISODateTime)
   createdAt!: Date;

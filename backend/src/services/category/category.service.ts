@@ -10,6 +10,7 @@ import {
   CategoryIconEnum
 } from '@/enums';
 import { NotFoundError } from '@/errors/not-found-error';
+import { UnauthorizedError } from '@/errors/unauthorized-error';
 import { Category } from '@/generated/prisma/client';
 import { CategoryModel } from '@/models/category.model';
 import { ICategoryService } from './category.service.interface';
@@ -30,13 +31,35 @@ export class CategoryService implements ICategoryService {
     return categories.map((category) => this._toCategoryModel(category));
   }
 
-  async create(data: CreateCategoryInput): Promise<CategoryModel> {
-    const category = await prismaClient.category.create({ data });
+  async findByUserId(userId: string): Promise<CategoryModel[]> {
+    const categories = await prismaClient.category.findMany({
+      where: { userId }
+    });
+    return categories.map((category) => this._toCategoryModel(category));
+  }
+
+  async create(
+    userId: string,
+    data: CreateCategoryInput
+  ): Promise<CategoryModel> {
+    const category = await prismaClient.category.create({
+      data: { ...data, userId }
+    });
     return this._toCategoryModel(category);
   }
 
-  async update(id: string, data: UpdateCategoryInput): Promise<CategoryModel> {
-    await this.findById(id);
+  async update(
+    id: string,
+    currentUserId: string,
+    data: UpdateCategoryInput
+  ): Promise<CategoryModel> {
+    const { userId } = await this.findById(id);
+
+    if (userId !== currentUserId) {
+      throw new UnauthorizedError(
+        'You are not authorized to update this category'
+      );
+    }
 
     const updatedCategory = await prismaClient.category.update({
       where: { id },
@@ -46,14 +69,46 @@ export class CategoryService implements ICategoryService {
     return this._toCategoryModel(updatedCategory);
   }
 
-  async delete(id: string): Promise<CategoryModel> {
-    await this.findById(id);
+  async delete(id: string, currentUserId: string): Promise<CategoryModel> {
+    const { userId } = await this.findById(id);
+
+    if (userId !== currentUserId) {
+      throw new UnauthorizedError(
+        'You are not authorized to delete this category'
+      );
+    }
 
     const deletedCategory = await prismaClient.category.delete({
       where: { id }
     });
 
     return this._toCategoryModel(deletedCategory);
+  }
+
+  async findCategoryWithMostTransactions(
+    currentUserId: string
+  ): Promise<CategoryModel | null> {
+    const category = await prismaClient.category.findFirst({
+      where: {
+        userId: currentUserId
+      },
+      orderBy: {
+        transactions: {
+          _count: 'desc'
+        }
+      },
+      include: {
+        _count: {
+          select: { transactions: true }
+        }
+      }
+    });
+
+    if (!category || !category?._count?.transactions) {
+      return null;
+    }
+
+    return this._toCategoryModel(category);
   }
 
   private _toCategoryModel(category: Category): CategoryModel {
@@ -92,26 +147,5 @@ export class CategoryService implements ICategoryService {
     }
 
     return hexColor;
-  }
-
-  async findCategoryWithMostTransactions(): Promise<CategoryModel> {
-    const category = await prismaClient.category.findFirst({
-      orderBy: {
-        transactions: {
-          _count: 'desc'
-        }
-      }
-      // include: {
-      //   _count: {
-      //     select: { transactions: true },
-      //   },
-      // },
-    });
-
-    if (!category) {
-      throw new NotFoundError('Category with most transactions not found');
-    }
-
-    return this._toCategoryModel(category);
   }
 }
