@@ -16,7 +16,7 @@ vi.mock('../../../prisma/prisma', () => ({
   }
 }));
 
-describe('UserService (unit)', () => {
+describe.only('UserService (unit)', () => {
   let service: UserService;
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('UserService (unit)', () => {
         password: '123456'
       });
 
-      expect(result.hashPassword).toBe('hashed-123456');
+      expect(result.user.hashPassword).toBe('hashed-123456');
       expect(prismaClient.user.create).toHaveBeenCalledWith({
         data: {
           name: 'John',
@@ -62,7 +62,7 @@ describe('UserService (unit)', () => {
           email: 'john@test.com',
           password: '123456'
         })
-      ).rejects.toThrow('User already exists');
+      ).rejects.toThrow('Usuário já existe');
 
       expect(prismaClient.user.create).not.toHaveBeenCalled();
     });
@@ -86,7 +86,7 @@ describe('UserService (unit)', () => {
       vi.mocked(prismaClient.user.findUnique).mockResolvedValue(null);
 
       await expect(service.delete('id-inexistente')).rejects.toThrow(
-        'User not found'
+        'Usuário não encontrado'
       );
       expect(prismaClient.user.delete).not.toHaveBeenCalled();
     });
@@ -120,7 +120,7 @@ describe('UserService (unit)', () => {
 
       await expect(
         service.update('id-inexistente', { name: 'John' })
-      ).rejects.toThrow('User not found');
+      ).rejects.toThrow('Usuário não encontrado');
 
       expect(prismaClient.user.update).not.toHaveBeenCalled();
     });

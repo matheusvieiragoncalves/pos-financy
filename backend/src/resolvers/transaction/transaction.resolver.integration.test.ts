@@ -178,7 +178,7 @@ describe('TransactionResolver (integration)', () => {
     expect(response.status).toBe(401);
     expect(response.body.errors).toBeDefined();
     expect(response.body.errors[0].message).toBe(
-      'You are not authorized to update this transaction'
+      'Você não está autorizado a atualizar esta transação'
     );
   });
 

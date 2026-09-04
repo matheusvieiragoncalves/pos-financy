@@ -90,7 +90,7 @@ describe('CategoryService (unit)', () => {
 
       await expect(
         service.delete('id-inexistente', fakeUserId)
-      ).rejects.toThrow('Category not found');
+      ).rejects.toThrow('Categoria não encontrada');
       expect(prismaClient.category.delete).not.toHaveBeenCalled();
     });
   });
@@ -135,7 +135,7 @@ describe('CategoryService (unit)', () => {
 
       await expect(
         service.update('id-inexistente', fakeUserId, { title: 'Test' })
-      ).rejects.toThrow('Category not found');
+      ).rejects.toThrow('Categoria não encontrada');
 
       expect(prismaClient.category.update).not.toHaveBeenCalled();
     });

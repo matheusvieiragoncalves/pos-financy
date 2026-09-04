@@ -34,7 +34,7 @@ export async function createApp() {
     formatError: (formattedError, error) => {
       const originalError = unwrapResolverError(error);
 
-      console.error('[GraphQL Error]', originalError);
+      // console.error('[GraphQL Error]', originalError);
 
       const isAppError = originalError instanceof AppError;
 

@@ -76,7 +76,7 @@ describe('TransactionService (unit)', () => {
       vi.mocked(categoryService.findById).mockRejectedValue(null);
 
       await expect(service.create(fakeUserId, fakeTransaction)).rejects.toThrow(
-        'Category not found'
+        'Categoria não encontrada'
       );
 
       expect(prismaClient.transaction.create).not.toHaveBeenCalled();
@@ -176,7 +176,7 @@ describe('TransactionService (unit)', () => {
 
       await expect(
         service.delete('id-inexistente', fakeUserId)
-      ).rejects.toThrow('Transaction not found');
+      ).rejects.toThrow('Transação não encontrada');
       expect(prismaClient.transaction.delete).not.toHaveBeenCalled();
     });
   });
@@ -224,7 +224,7 @@ describe('TransactionService (unit)', () => {
 
       await expect(
         service.update('id-inexistente', fakeUserId, { description: 'Test' })
-      ).rejects.toThrow('Transaction not found');
+      ).rejects.toThrow('Transação não encontrada');
 
       expect(prismaClient.transaction.update).not.toHaveBeenCalled();
     });

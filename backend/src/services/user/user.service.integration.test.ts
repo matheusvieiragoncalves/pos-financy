@@ -12,12 +12,12 @@ describe('UserService (integration)', () => {
       password: '123456'
     });
 
-    expect(created.hashPassword).not.toBe('123456');
+    expect(created.user.hashPassword).not.toBe('123456');
 
     const passwordService = new PasswordService();
     const isValid = await passwordService.compare(
       '123456',
-      created.hashPassword as string
+      created.user.hashPassword as string
     );
     expect(isValid).toBe(true);
   });
@@ -27,17 +27,19 @@ describe('UserService (integration)', () => {
 
     await expect(
       service.create({ name: 'B', email: 'dup@test.com', password: '456' })
-    ).rejects.toThrow('User already exists');
+    ).rejects.toThrow('Usuário já existe');
   });
 
   it('deve atualizar um usuário existente', async () => {
-    const user = await service.create({
+    const response = await service.create({
       name: 'Carlos',
       email: 'carlos@test.com',
       password: '123'
     });
 
-    const updated = await service.update(user.id, { name: 'Carlos Silva' });
+    const updated = await service.update(response.user.id, {
+      name: 'Carlos Silva'
+    });
 
     expect(updated.name).toBe('Carlos Silva');
   });
@@ -45,19 +47,19 @@ describe('UserService (integration)', () => {
   it('deve lançar erro ao atualizar usuário inexistente', async () => {
     await expect(
       service.update('id-que-nao-existe', { name: 'Ghost' })
-    ).rejects.toThrow('User not found');
+    ).rejects.toThrow('Usuário não encontrado');
   });
 
   it('deve deletar um usuário existente', async () => {
-    const user = await service.create({
+    const response = await service.create({
       name: 'Delete Me',
       email: 'delete@test.com',
       password: '123'
     });
 
-    const deleted = await service.delete(user.id);
+    const deleted = await service.delete(response.user.id);
 
-    expect(deleted.id).toBe(user.id);
+    expect(deleted.id).toBe(response.user.id);
 
     const all = await service.findAll();
     expect(all).toHaveLength(0);

@@ -8,7 +8,6 @@ import {
 import { TransactionModel } from '@/models/transaction.model';
 import { UserModel } from '@/models/user.model';
 import { CategoryService } from '@/services/category/category.service';
-import { JwtService } from '@/services/jwt/jwt.service';
 import { PasswordService } from '@/services/password/password.service';
 import { TransactionService } from '@/services/transaction/transaction.service';
 import { UserService } from '@/services/user/user.service';
@@ -50,15 +49,12 @@ export async function createAuthenticatedTestUser(overrides?: {
   password?: string;
 }): Promise<{ user: UserModel; accessToken: string }> {
   const userService = new UserService(new PasswordService());
-  const jwtService = new JwtService();
 
-  const user = await userService.create({
+  const { user, accessToken } = await userService.create({
     name: overrides?.name ?? 'Teste',
     email: overrides?.email ?? `teste-${Date.now()}@teste.com`, // evita colisão entre testes
     password: overrides?.password ?? '123456'
   });
-
-  const { accessToken } = jwtService.sign({ id: user.id, email: user.email });
 
   return { user, accessToken };
 }
@@ -77,7 +73,7 @@ export async function createTestUser(overrides?: {
   password?: string;
 }): Promise<{ user: UserModel }> {
   const userService = new UserService(new PasswordService());
-  const user = await userService.create({
+  const { user } = await userService.create({
     name: overrides?.name ?? 'Teste',
     email: overrides?.email ?? `teste-${Date.now()}@teste.com`,
     password: overrides?.password ?? '123456'

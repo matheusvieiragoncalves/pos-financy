@@ -13,9 +13,11 @@ describe('UserResolver (integration)', () => {
       query: `
         mutation UserCreate($data: CreateUserInput!) {
           userCreate(data: $data) {
-            id
+            user {
+              id
             name
             email
+            }
           }
         }
       `,
@@ -25,8 +27,8 @@ describe('UserResolver (integration)', () => {
     });
 
     expect(response.status).toBe(200);
-    expect(response.body.data.userCreate.email).toBe('ana@test.com');
-    expect(response.body.data.userCreate.id).toBeDefined();
+    expect(response.body.data.userCreate.user.email).toBe('ana@test.com');
+    expect(response.body.data.userCreate.user.id).toBeDefined();
   });
 
   it('deve listar usuários via query USERS', async () => {
@@ -57,15 +59,15 @@ describe('UserResolver (integration)', () => {
   it('deve atualizar um usuário via mutation USER_UPDATE', async () => {
     const client = await createTestClient();
 
-    const { accessToken, user } = await createAuthenticatedTestUser();
+    const { accessToken } = await createAuthenticatedTestUser();
 
     const response = await client
       .post('/graphql')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         query: `
-          mutation UserUpdate($id: String!, $data: UpdateUserInput!) {
-            userUpdate(id: $id, data: $data) {
+          mutation UserUpdate($data: UpdateUserInput!) {
+            userUpdate(data: $data) {
               id
               name
               email
@@ -73,7 +75,6 @@ describe('UserResolver (integration)', () => {
           }
         `,
         variables: {
-          id: user.id,
           data: { name: 'Ana Updated', email: 'ana.updated@test.com' }
         }
       });
