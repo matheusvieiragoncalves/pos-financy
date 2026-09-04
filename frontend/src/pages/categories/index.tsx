@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { CategoryCard } from "./components/CategoryCard"
 import { CategoryStatisticalCard } from "./components/CategoryStatisticalCard"
 import { CreateCategoryDialog } from "./components/CreateCategoryDialog"
+import { DeleteCategoryDialog } from "./components/DeleteCategoryDialog"
 
 export function CategoriesPage() {
   const [categorySelected, setCategorySelected] = useState<Category | null>(
@@ -14,17 +15,17 @@ export function CategoriesPage() {
 
   const [openDialog, setOpenDialog] = useState(false)
 
-  const [, setOpenDialogExclude] = useState(false)
+  const [openDialogExclude, setOpenDialogExclude] = useState(false)
+
+  function handleCreateCategory() {
+    setCategorySelected(null)
+    setOpenDialog(true)
+  }
 
   function handleEditCategory(category: Category) {
     setCategorySelected(category)
     setOpenDialog(true)
   }
-
-  // function handleCreateCategory() {
-  //   setCategorySelected(null)
-  //   setOpenDialog(true)
-  // }
 
   function handleDeleteCategory(category: Category) {
     setCategorySelected(category)
@@ -59,7 +60,7 @@ export function CategoriesPage() {
         </div>
         <Button
           className="flex bg-brand-base text-white"
-          onClick={() => setOpenDialog(true)}
+          onClick={handleCreateCategory}
         >
           <Plus /> Nova categoria
         </Button>
@@ -100,10 +101,17 @@ export function CategoriesPage() {
       </div>
 
       <CreateCategoryDialog
-        key={categorySelected?.id || "new"}
+        key={`create-or-edit-${categorySelected?.id}`}
         open={openDialog}
         onClose={handleCloseDialogs}
         category={categorySelected}
+      />
+
+      <DeleteCategoryDialog
+        key={`delete-${categorySelected?.id}`}
+        open={openDialogExclude}
+        onClose={handleCloseDialogs}
+        category={categorySelected as Category}
       />
     </div>
   )

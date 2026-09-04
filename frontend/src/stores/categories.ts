@@ -3,6 +3,7 @@ import { apolloClient } from "@/lib/graphql/apollo"
 
 import {
   MUTATION_CREATE_CATEGORY,
+  MUTATION_DELETE_CATEGORY,
   MUTATION_UPDATE_CATEGORY,
 } from "@/lib/graphql/mutations"
 
@@ -20,6 +21,7 @@ type TCategoriesState = {
   fetchCategories: () => void
   createCategory: (data: TCategoryValueToCreate) => void
   updateCategory: (id: string, data: TCategoryValueToCreate) => void
+  deleteCategory: (id: string) => void
 }
 
 enableMapSet()
@@ -31,6 +33,8 @@ export const useCategories = create<
   immer((set) => {
     async function fetchCategories() {
       set((state) => {
+        state.categories = new Map()
+        state.categoryWithMostTransactions = null
         state.isLoading = true
       })
 
@@ -98,6 +102,7 @@ export const useCategories = create<
         toast.add({ title: "Erro ao criar categoria", type: "error" })
       }
     }
+
     async function updateCategory(id: string, data: TCategoryValueToCreate) {
       set((state) => {
         state.isLoading = true
@@ -129,12 +134,42 @@ export const useCategories = create<
       }
     }
 
+    async function deleteCategory(id: string) {
+      set((state) => {
+        state.isLoading = true
+      })
+
+      try {
+        const response = await apolloClient.mutate({
+          mutation: MUTATION_DELETE_CATEGORY,
+          variables: { id },
+          fetchPolicy: "no-cache",
+        })
+
+        if (!response?.data?.categoryDelete) {
+          toast.add({ title: "Erro ao excluir categoria", type: "error" })
+          return
+        }
+
+        await fetchCategories()
+
+        toast.add({ title: "Categoria excluída com sucesso", type: "success" })
+      } catch {
+        set((state) => {
+          state.isLoading = false
+        })
+
+        toast.add({ title: "Erro ao excluir categoria", type: "error" })
+      }
+    }
+
     return {
       categories: new Map(),
       isLoading: false,
       fetchCategories,
       createCategory,
       updateCategory,
+      deleteCategory,
       categoryWithMostTransactions: null,
     }
   })
