@@ -1,10 +1,12 @@
 import { prismaClient } from '../../../prisma/prisma';
 
+import { PaginationInput } from '@/dtos/input/pagination.input';
 import {
   CreateTransactionInput,
   UpdateTransactionInput
 } from '@/dtos/input/transaction.input';
 import { TransactionsTotalOutput } from '@/dtos/output/total.output';
+import { TransactionPaginatedOutput } from '@/dtos/output/transaction-paginated.output';
 import { TransactionTypeEnum } from '@/enums';
 import { NotFoundError } from '@/errors/not-found-error';
 import { UnauthorizedError } from '@/errors/unauthorized-error';
@@ -45,6 +47,32 @@ export class TransactionService implements ITransactionService {
     return transactions.map((transaction) =>
       this._toTransactionModel(transaction)
     );
+  }
+
+  async findByUserIdPaginated(
+    userId: string,
+    { page, perPage }: PaginationInput
+  ): Promise<TransactionPaginatedOutput> {
+    const skip = (page - 1) * perPage;
+
+    const [transactions, totalItems] = await Promise.all([
+      prismaClient.transaction.findMany({
+        where: { userId },
+        skip,
+        take: perPage,
+        orderBy: { date: 'desc' }
+      }),
+      prismaClient.transaction.count({
+        where: { userId }
+      })
+    ]);
+
+    return {
+      items: transactions.map((t) => this._toTransactionModel(t)),
+      totalItems,
+      currentPage: page,
+      totalPages: Math.ceil(totalItems / perPage)
+    };
   }
 
   async create(

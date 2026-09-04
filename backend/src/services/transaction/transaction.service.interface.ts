@@ -1,14 +1,20 @@
+import { PaginationInput } from '@/dtos/input/pagination.input';
 import {
   CreateTransactionInput,
   UpdateTransactionInput
 } from '@/dtos/input/transaction.input';
 import { TransactionsTotalOutput } from '@/dtos/output/total.output';
+import { TransactionPaginatedOutput } from '@/dtos/output/transaction-paginated.output';
 
 import { TransactionModel } from '@/models/transaction.model';
 
 export interface ITransactionService {
   findAll(): Promise<TransactionModel[]>;
   findByUserId(id: string): Promise<TransactionModel[]>;
+  findByUserIdPaginated(
+    userId: string,
+    pagination: PaginationInput
+  ): Promise<TransactionPaginatedOutput>;
   create(
     userId: string,
     data: CreateTransactionInput

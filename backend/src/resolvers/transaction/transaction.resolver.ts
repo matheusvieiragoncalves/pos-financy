@@ -1,9 +1,12 @@
 import { CurrentUserId } from '@/decorators/current-user-id.decorator';
+import { PaginationInput } from '@/dtos/input/pagination.input';
 import {
   CreateTransactionInput,
   UpdateTransactionInput
 } from '@/dtos/input/transaction.input';
 import { TransactionsTotalOutput } from '@/dtos/output/total.output';
+import { TransactionPaginatedOutput } from '@/dtos/output/transaction-paginated.output';
+
 import { isAuthenticated } from '@/middlewares/auth.middleware';
 import { CategoryModel } from '@/models/category.model';
 import { TransactionModel } from '@/models/transaction.model';
@@ -29,11 +32,16 @@ export class TransactionResolver {
     private readonly categoryService: ICategoryService = new CategoryService()
   ) {}
 
-  @Query(() => [TransactionModel])
+  @Query(() => TransactionPaginatedOutput)
   async transactions(
+    @Arg('pagination', () => PaginationInput, { nullable: true })
+    pagination: PaginationInput = { page: 1, perPage: 10 },
     @CurrentUserId() currentUserId: string
-  ): Promise<TransactionModel[]> {
-    return this.transactionService.findByUserId(currentUserId);
+  ): Promise<TransactionPaginatedOutput> {
+    return this.transactionService.findByUserIdPaginated(
+      currentUserId,
+      pagination
+    );
   }
 
   @Mutation(() => TransactionModel)

@@ -20,28 +20,30 @@ describe('TransactionResolver (integration)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         query: `
-          query {
-            transactions {
-              id
-              amount
-              date
-              description
-              category {
+          query FetchTransactions($pagination: PaginationInput) {
+            transactions(pagination: $pagination) {
+              items {
                 id
-                title
+                description
+                amount
               }
-              user {
-                id
-                name
-              }
+              totalItems
+              currentPage
+              totalPages
             }
           }
-      `
+      `,
+        variables: {
+          pagination: {
+            page: 1,
+            perPage: 10
+          }
+        }
       });
 
     expect(response.status).toBe(200);
-    expect(response.body.data.transactions).toBeInstanceOf(Array);
-    expect(response.body.data.transactions.length).toBeGreaterThan(0);
+    expect(response.body.data.transactions.items).toBeInstanceOf(Array);
+    expect(response.body.data.transactions.totalItems).toBeGreaterThan(0);
   });
 
   it('deve criar uma transação via mutation TRANSACTION_CREATE', async () => {
