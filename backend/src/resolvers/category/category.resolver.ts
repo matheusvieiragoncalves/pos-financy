@@ -6,13 +6,23 @@ import { isAuthenticated } from '@/middlewares/auth.middleware';
 import { CategoryModel } from '@/models/category.model';
 import { CategoryService } from '@/services/category/category.service';
 import { ICategoryService } from '@/services/category/category.service.interface';
-import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
+import { TransactionService } from '@/services/transaction/transaction.service';
+import {
+  Arg,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+  UseMiddleware
+} from 'type-graphql';
 
-@Resolver()
+@Resolver(() => CategoryModel)
 @UseMiddleware(isAuthenticated)
 export class CategoryResolver {
   constructor(
-    private readonly categoryService: ICategoryService = new CategoryService()
+    private readonly categoryService: ICategoryService = new CategoryService(),
+    private readonly transactionService: TransactionService = new TransactionService()
   ) {}
 
   @Query(() => [CategoryModel])
@@ -40,5 +50,15 @@ export class CategoryResolver {
     @Arg('id', () => String) id: string
   ): Promise<CategoryModel> {
     return this.categoryService.delete(id);
+  }
+
+  @Query(() => CategoryModel)
+  async categoryWithMostTransactions(): Promise<CategoryModel> {
+    return this.categoryService.findCategoryWithMostTransactions();
+  }
+
+  @FieldResolver(() => Number)
+  async countTransactions(@Root() category: CategoryModel): Promise<number> {
+    return this.transactionService.getCountByCategoryId(category.id);
   }
 }

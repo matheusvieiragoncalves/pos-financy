@@ -42,7 +42,9 @@ export function CategoryCard({
       </CardContent>
       <CardFooter className="flex items-center justify-between">
         <CategoryTitleTag title={category.title} colorCSS={category.colorCSS} />
-        <span className="text-sm text-gray-600">12 itens</span>
+        <span className="text-sm text-gray-600">
+          {category.countTransactions} itens
+        </span>
       </CardFooter>
     </Card>
   )

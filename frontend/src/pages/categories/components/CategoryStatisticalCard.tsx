@@ -14,12 +14,13 @@ export function CategoryStatisticalCard({
   Icon,
   value,
   subTitle,
+  iconColor,
 }: ICategoryStatisticalProps) {
   return (
     <Card className="flex w-full flex-row items-baseline justify-baseline p-6">
       <CardHeader className="mr-4 p-0">
         <CardTitle className="flex items-center gap-3 p-0">
-          <Icon />
+          <Icon className={iconColor} />
         </CardTitle>
       </CardHeader>
       <CardContent className="w-full p-0">

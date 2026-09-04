@@ -35,8 +35,8 @@ export function CategoryList({ categories, className }: ICategoryListProps) {
               id,
               title,
               totalAmountTransactionsFormatted,
-              numberTransactions,
               colorCSS,
+              countTransactions,
             }) => {
               return (
                 <div
@@ -50,7 +50,7 @@ export function CategoryList({ categories, className }: ICategoryListProps) {
                   />
 
                   <span className="text-sm font-normal text-gray-600">
-                    {numberTransactions} itens
+                    {countTransactions} itens
                   </span>
                   <span className="text-sm font-bold text-gray-800">
                     {totalAmountTransactionsFormatted}

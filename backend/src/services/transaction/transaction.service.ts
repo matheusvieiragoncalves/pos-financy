@@ -137,4 +137,12 @@ export class TransactionService implements ITransactionService {
 
     return { totalIn, totalOut, total };
   }
+
+  async getCountByCategoryId(categoryId: string): Promise<number> {
+    const count = await prismaClient.transaction.count({
+      where: { categoryId }
+    });
+
+    return count;
+  }
 }

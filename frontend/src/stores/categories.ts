@@ -16,6 +16,7 @@ import { immer } from "zustand/middleware/immer"
 type TCategoriesState = {
   categories: Map<string, Category>
   isLoading: boolean
+  categoryWithMostTransactions: Category | null
   fetchCategories: () => void
   createCategory: (data: TCategoryValueToCreate) => void
   updateCategory: (id: string, data: TCategoryValueToCreate) => void
@@ -42,6 +43,7 @@ export const useCategories = create<
         if (!response?.data?.categories) {
           set((state) => {
             state.categories = new Map()
+            state.categoryWithMostTransactions = null
             state.isLoading = false
           })
 
@@ -53,6 +55,10 @@ export const useCategories = create<
           response?.data?.categories.forEach((item) => {
             state.categories.set(item.id.toString(), new Category(item))
           })
+          state.categoryWithMostTransactions = response?.data
+            ?.categoryWithMostTransactions
+            ? new Category(response.data.categoryWithMostTransactions)
+            : null
           state.isLoading = false
         })
       } catch {
@@ -129,6 +135,7 @@ export const useCategories = create<
       fetchCategories,
       createCategory,
       updateCategory,
+      categoryWithMostTransactions: null,
     }
   })
 )

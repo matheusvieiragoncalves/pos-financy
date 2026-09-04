@@ -93,4 +93,25 @@ export class CategoryService implements ICategoryService {
 
     return hexColor;
   }
+
+  async findCategoryWithMostTransactions(): Promise<CategoryModel> {
+    const category = await prismaClient.category.findFirst({
+      orderBy: {
+        transactions: {
+          _count: 'desc'
+        }
+      }
+      // include: {
+      //   _count: {
+      //     select: { transactions: true },
+      //   },
+      // },
+    });
+
+    if (!category) {
+      throw new NotFoundError('Category with most transactions not found');
+    }
+
+    return this._toCategoryModel(category);
+  }
 }

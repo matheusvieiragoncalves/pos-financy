@@ -10,4 +10,5 @@ export interface ICategoryService {
   update(id: string, data: UpdateCategoryInput): Promise<CategoryModel>;
   delete(id: string): Promise<CategoryModel>;
   findById(id: string): Promise<CategoryModel | null>;
+  findCategoryWithMostTransactions(): Promise<CategoryModel>;
 }

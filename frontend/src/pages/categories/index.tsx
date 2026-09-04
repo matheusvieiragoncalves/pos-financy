@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import type { Category } from "@/models/category.model"
 import { useCategories } from "@/stores/categories"
-import { Plus, Tag } from "lucide-react"
+import { ArrowDownUp, Plus, Tag } from "lucide-react"
 import { useEffect, useState } from "react"
 import { CategoryCard } from "./components/CategoryCard"
 import { CategoryStatisticalCard } from "./components/CategoryStatisticalCard"
@@ -40,6 +40,10 @@ export function CategoriesPage() {
   const categories = useCategories((state) => state.categories)
   const fetchCategories = useCategories((state) => state.fetchCategories)
 
+  const categoryWithMostTransactions = useCategories(
+    (state) => state.categoryWithMostTransactions
+  )
+
   useEffect(() => {
     fetchCategories()
   }, [])
@@ -70,17 +74,17 @@ export function CategoriesPage() {
         />
 
         <CategoryStatisticalCard
-          Icon={Tag}
-          iconColor="text-gray-700"
+          Icon={ArrowDownUp}
+          iconColor="text-purple-base"
           value="10"
           subTitle="Total Categories"
         />
 
         <CategoryStatisticalCard
-          Icon={Tag}
-          iconColor="text-gray-700"
-          value="10"
-          subTitle="Total Categories"
+          Icon={categoryWithMostTransactions?.Icon || Tag}
+          iconColor="text-blue-base"
+          value={categoryWithMostTransactions?.title || ""}
+          subTitle="categoria mais utilizada"
         />
       </div>
 

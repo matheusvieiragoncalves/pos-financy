@@ -17,8 +17,8 @@ export class Category {
   id!: string
   title!: string
   description!: string
-  numberTransactions!: number
   totalAmountTransactions!: number
+  countTransactions!: number
   color!: CategoryColorEnum
   icon!: CategoryIconEnum
 
