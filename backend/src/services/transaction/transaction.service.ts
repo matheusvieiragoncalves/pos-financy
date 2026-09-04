@@ -58,6 +58,7 @@ export class TransactionService implements ITransactionService {
     const transaction = await prismaClient.transaction.create({
       data: { ...data, userId }
     });
+
     return this._toTransactionModel(transaction);
   }
 

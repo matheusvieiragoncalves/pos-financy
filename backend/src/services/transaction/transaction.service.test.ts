@@ -73,7 +73,7 @@ describe('TransactionService (unit)', () => {
 
       const fakeUserId = '1';
 
-      vi.mocked(categoryService.findById).mockResolvedValue(null);
+      vi.mocked(categoryService.findById).mockRejectedValue(null);
 
       await expect(service.create(fakeUserId, fakeTransaction)).rejects.toThrow(
         'Category not found'

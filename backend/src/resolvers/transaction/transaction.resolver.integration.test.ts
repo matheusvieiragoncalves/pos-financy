@@ -83,8 +83,6 @@ describe('TransactionResolver (integration)', () => {
         }
       });
 
-    console.log(response.body.data.transactionCreate.date);
-
     expect(response.status).toBe(200);
     expect(response.body.data.transactionCreate.id).toBeDefined();
     expect(response.body.data.transactionCreate.amount).toBe(100);

@@ -7,4 +7,5 @@ export class FakeCategoryService implements ICategoryService {
   update = vi.fn();
   delete = vi.fn();
   findById = vi.fn();
+  findCategoryWithMostTransactions = vi.fn();
 }
