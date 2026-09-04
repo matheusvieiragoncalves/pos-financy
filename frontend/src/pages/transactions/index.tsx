@@ -8,10 +8,11 @@ import { Paginator } from "@/components/Paginator"
 
 import {
   TransactionCreateDialog,
+  TransactionDeleteDialog,
+  TransactionFilters,
   TransactionType,
 } from "@/components/transaction"
 
-import { TransactionDeleteDialog } from "@/components/transaction/TransactionDeleteDialog"
 import {
   Table,
   TableBody,
@@ -104,7 +105,7 @@ export function TransactionsPage() {
         </Button>
       </div>
 
-      <Card>Filtros</Card>
+      <TransactionFilters />
 
       <Card className="gap-0 p-0">
         <CardContent className="p-0">

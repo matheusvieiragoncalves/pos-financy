@@ -88,7 +88,10 @@ export function TransactionList({
         </div>
       </CardContent>
 
-      <TransactionCreateDialog open={openDialog} onOpenChange={setOpenDialog} />
+      <TransactionCreateDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+      />
     </Card>
   )
 }

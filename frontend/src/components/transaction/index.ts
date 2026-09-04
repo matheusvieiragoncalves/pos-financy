@@ -1,4 +1,6 @@
 export { TransactionAmount } from "./TransactionAmount"
 export { TransactionCreateDialog } from "./TransactionCreateDialog"
+export { TransactionDeleteDialog } from "./TransactionDeleteDialog"
+export { TransactionFilters } from "./TransactionFilters"
 export { TransactionTitle } from "./TransactionTitle"
 export { TransactionType } from "./TransactionType"
