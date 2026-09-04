@@ -22,6 +22,7 @@ type TCategoriesState = {
   createCategory: (data: TCategoryValueToCreate) => void
   updateCategory: (id: string, data: TCategoryValueToCreate) => void
   deleteCategory: (id: string) => void
+  reset: () => void
 }
 
 enableMapSet()
@@ -169,6 +170,14 @@ export const useCategories = create<
       }
     }
 
+    function reset() {
+      set((state) => {
+        state.categories = new Map()
+        state.isLoading = false
+        state.categoryWithMostTransactions = null
+      })
+    }
+
     return {
       categories: new Map(),
       isLoading: false,
@@ -177,6 +186,7 @@ export const useCategories = create<
       updateCategory,
       deleteCategory,
       categoryWithMostTransactions: null,
+      reset,
     }
   })
 )

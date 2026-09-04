@@ -1,11 +1,11 @@
 import type { ISignUpVariables } from "@/@types"
+import type { User } from "@/models/user.model"
 import { gql, type TypedDocumentNode } from "@apollo/client"
 
 interface ISignUpMutationData {
   userCreate: {
-    id: string
-    name: string
-    email: string
+    user: User
+    accessToken: string
   }
 }
 
@@ -19,11 +19,14 @@ export const MUTATION_SIGN_UP: TypedDocumentNode<
 > = gql`
   mutation UserCreate($data: CreateUserInput!) {
     userCreate(data: $data) {
-      id
-      name
-      email
-      createdAt
-      updatedAt
+      user {
+        id
+        name
+        email
+        createdAt
+        updatedAt
+      }
+      accessToken
     }
   }
 `

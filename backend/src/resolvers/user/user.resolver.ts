@@ -1,6 +1,7 @@
 import { CurrentUserId } from '@/decorators/current-user-id.decorator';
 import { Public } from '@/decorators/public.decorator';
 import { CreateUserInput, UpdateUserInput } from '@/dtos/input/user.input';
+import { CreateUserOutput } from '@/dtos/output/create-user.output';
 import { isAuthenticated } from '@/middlewares/auth.middleware';
 import { UserModel } from '@/models/user.model';
 import { UserService } from '@/services/user/user.service';
@@ -18,10 +19,10 @@ export class UserResolver {
   }
 
   @Public()
-  @Mutation(() => UserModel)
+  @Mutation(() => CreateUserOutput)
   async userCreate(
     @Arg('data', () => CreateUserInput) data: CreateUserInput
-  ): Promise<UserModel> {
+  ): Promise<CreateUserOutput> {
     return this.userService.create(data);
   }
 

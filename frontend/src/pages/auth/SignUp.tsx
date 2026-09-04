@@ -7,9 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Field, FieldLabel, FieldSet } from "@/components/ui/field"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group"
 import { toast } from "@/components/ui/toast"
 import { useAuthStore } from "@/stores/auth"
-import { LogInIcon } from "lucide-react"
+import { Eye, EyeClosed, Lock, LogInIcon, Mail, UserRound } from "lucide-react"
 
 import { useState } from "react"
 import { Link } from "react-router-dom"
@@ -19,6 +26,7 @@ export function SignUpPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   const signUp = useAuthStore((store) => store.signUp)
 
@@ -64,59 +72,88 @@ export function SignUpPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="text-sm">
-                Nome completo
-              </label>
-              <input
-                id="name"
-                type="text"
-                placeholder="Seu nome completo"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="focus:ring-opacity-50 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-sm">
-                E-mail
-              </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="mail@exemplo.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="focus:ring-opacity-50 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="password" className="text-sm">
-                Senha
-              </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Digite sua senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="focus:ring-opacity-50 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-              />
-              <span className="text-xs text-gray-500">
-                A senha deve ter no mínimo 8 caracteres
-              </span>
-            </div>
+            <FieldSet className="flex flex-col gap-4">
+              <Field>
+                <FieldLabel
+                  className="text-sm font-medium text-gray-700"
+                  htmlFor="name"
+                >
+                  Nome completo
+                </FieldLabel>
+                <InputGroup className="flex items-center gap-2 rounded-lg border-gray-400 bg-white py-6 text-base">
+                  <InputGroupInput
+                    id="name"
+                    placeholder="Digite seu nome completo"
+                    className="text-base placeholder:text-base placeholder:text-gray-400"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <InputGroupAddon align="inline-start">
+                    <UserRound className="size-4 text-gray-400" />
+                  </InputGroupAddon>
+                </InputGroup>
+              </Field>
+              <Field>
+                <FieldLabel
+                  className="text-sm font-medium text-gray-700"
+                  htmlFor="email"
+                >
+                  E-mail
+                </FieldLabel>
+                <InputGroup className="flex items-center gap-0 rounded-lg border-gray-400 bg-white py-6 text-base opacity-90">
+                  <InputGroupInput
+                    id="email"
+                    placeholder="mail@exemplo.com"
+                    className="text-base placeholder:text-base placeholder:text-gray-400"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <InputGroupAddon align="inline-start">
+                    <Mail className="size-4 text-gray-400" />
+                  </InputGroupAddon>
+                </InputGroup>
+              </Field>
+              <Field>
+                <FieldLabel
+                  className="text-sm font-medium text-gray-700"
+                  htmlFor="password"
+                >
+                  Senha
+                </FieldLabel>
+                <InputGroup className="flex items-center gap-0 rounded-lg border-gray-400 bg-white py-6 text-base opacity-90">
+                  <InputGroupInput
+                    id="password"
+                    type={isPasswordVisible ? "text" : "password"}
+                    placeholder="Digite sua senha"
+                    className="text-base placeholder:text-base placeholder:text-gray-400"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <InputGroupAddon align="inline-start">
+                    <Lock className="size-4 text-gray-400" />
+                  </InputGroupAddon>
+                  <InputGroupAddon align="inline-end">
+                    <InputGroupButton
+                      onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                      size="icon-xs"
+                    >
+                      {isPasswordVisible ? <Eye /> : <EyeClosed />}
+                    </InputGroupButton>
+                  </InputGroupAddon>
+                </InputGroup>
+                <span className="text-xs text-gray-500">
+                  A senha deve ter no mínimo 8 caracteres
+                </span>
+              </Field>
 
-            <Button
-              type="submit"
-              className="w-full bg-brand-base py-6 text-base hover:bg-brand-dark"
-              disabled={loading}
-            >
-              Cadastrar
-            </Button>
+              <Button
+                type="submit"
+                className="mt-2 w-full bg-brand-base py-6 text-base hover:bg-brand-dark"
+                disabled={loading}
+              >
+                Cadastrar
+              </Button>
+            </FieldSet>
           </form>
 
           <div className="my-6 flex items-center gap-2">

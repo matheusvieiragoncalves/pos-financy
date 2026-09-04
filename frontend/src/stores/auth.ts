@@ -13,6 +13,8 @@ import { enableMapSet } from "immer"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 import { immer } from "zustand/middleware/immer"
+import { useCategories } from "./categories"
+import { useTransactions } from "./transactions"
 
 export type TUpdateUserParams = Pick<User, "name">
 
@@ -65,13 +67,14 @@ export const useAuthStore = create<IAuthStore>()(
           })
 
           if (response.data?.userCreate) {
-            const { id, name, email } = response.data.userCreate
+            const { id, name, email } = response.data.userCreate.user
+            const { accessToken } = response.data.userCreate
 
             const user = new User({ id, name, email })
 
             set((state) => {
               state.user = user
-              state.accessToken = null
+              state.accessToken = accessToken
               state.isAuthenticated = true
             })
 
@@ -83,15 +86,6 @@ export const useAuthStore = create<IAuthStore>()(
           console.log("Erro ao ao registrar usuário:", error)
           throw error
         }
-      }
-
-      function logout() {
-        set((state) => {
-          state.user = null
-          state.accessToken = null
-          state.isAuthenticated = false
-        })
-        apolloClient.clearStore()
       }
 
       async function updateUser(data: TUpdateUserParams) {
@@ -130,6 +124,19 @@ export const useAuthStore = create<IAuthStore>()(
           })
           throw error
         }
+      }
+
+      function logout() {
+        set((state) => {
+          state.user = null
+          state.accessToken = null
+          state.isAuthenticated = false
+        })
+
+        useCategories.getState().reset()
+        useTransactions.getState().reset()
+
+        apolloClient.clearStore()
       }
 
       return {

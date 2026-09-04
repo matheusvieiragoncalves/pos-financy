@@ -35,6 +35,7 @@ type TTransactionsState = {
     transaction: TTransactionValueToCreate
   ) => Promise<void>
   deleteTransaction: (id: string) => Promise<void>
+  reset: () => void
 }
 
 enableMapSet()
@@ -202,6 +203,17 @@ export const useTransactions = create<
       }
     }
 
+    function reset() {
+      set((state) => {
+        state.transactions = new Map()
+        state.pagination = DEFAULT_PAGINATION
+        state.totalIn = 0
+        state.totalOut = 0
+        state.total = 0
+        state.isLoading = false
+      })
+    }
+
     return {
       totalIn: 0,
       totalOut: 0,
@@ -213,6 +225,7 @@ export const useTransactions = create<
       createTransaction,
       updateTransaction,
       deleteTransaction,
+      reset,
     }
   })
 )

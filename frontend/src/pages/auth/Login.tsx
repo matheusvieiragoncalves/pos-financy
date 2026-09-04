@@ -7,9 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Field, FieldLabel, FieldSet } from "@/components/ui/field"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group"
 import { toast } from "@/components/ui/toast"
 import { useAuthStore } from "@/stores/auth"
-import { UserRoundPlus } from "lucide-react"
+import { Eye, EyeClosed, Lock, Mail, UserRoundPlus } from "lucide-react"
 
 import { useState } from "react"
 import { Link } from "react-router-dom"
@@ -18,6 +25,7 @@ export function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   const login = useAuthStore((state) => state.login)
 
@@ -63,49 +71,73 @@ export function LoginPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-sm">
-                E-mail
-              </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="mail@exemplo.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="focus:ring-opacity-50 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="password" className="text-sm">
-                Senha
-              </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Digite sua senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="focus:ring-opacity-50 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-              />
-            </div>
-            <div className="flex flex-row justify-between">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" />
-                Lembrar-me
-              </label>
-              <Link to="/recover-password">Recuperar senha</Link>
-            </div>
+            <FieldSet className="flex flex-col gap-4">
+              <Field>
+                <FieldLabel
+                  className="text-sm font-medium text-gray-700"
+                  htmlFor="email"
+                >
+                  E-mail
+                </FieldLabel>
+                <InputGroup className="flex items-center gap-0 rounded-lg border-gray-400 bg-white py-6 text-base opacity-90">
+                  <InputGroupInput
+                    id="email"
+                    placeholder="mail@exemplo.com"
+                    className="text-base placeholder:text-base placeholder:text-gray-400"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <InputGroupAddon align="inline-start">
+                    <Mail className="size-4 text-gray-400" />
+                  </InputGroupAddon>
+                </InputGroup>
+              </Field>
+              <Field>
+                <FieldLabel
+                  className="text-sm font-medium text-gray-700"
+                  htmlFor="password"
+                >
+                  Senha
+                </FieldLabel>
+                <InputGroup className="flex items-center gap-0 rounded-lg border-gray-400 bg-white py-6 text-base opacity-90">
+                  <InputGroupInput
+                    id="password"
+                    type={isPasswordVisible ? "text" : "password"}
+                    placeholder="Digite sua senha"
+                    className="text-base placeholder:text-base placeholder:text-gray-400"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <InputGroupAddon align="inline-start">
+                    <Lock className="size-4 text-gray-400" />
+                  </InputGroupAddon>
+                  <InputGroupAddon align="inline-end">
+                    <InputGroupButton
+                      onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                      size="icon-xs"
+                    >
+                      {isPasswordVisible ? <Eye /> : <EyeClosed />}
+                    </InputGroupButton>
+                  </InputGroupAddon>
+                </InputGroup>
+              </Field>
 
-            <Button
-              type="submit"
-              className="w-full bg-brand-base py-6 text-base hover:bg-brand-dark"
-              disabled={loading}
-            >
-              Entrar
-            </Button>
+              <div className="flex flex-row justify-between">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" />
+                  Lembrar-me
+                </label>
+                <Link to="/recover-password">Recuperar senha</Link>
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full bg-brand-base py-6 text-base hover:bg-brand-dark"
+                disabled={loading}
+              >
+                Entrar
+              </Button>
+            </FieldSet>
           </form>
 
           <div className="my-6 flex items-center gap-2">
