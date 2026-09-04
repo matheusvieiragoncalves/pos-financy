@@ -65,28 +65,28 @@ export function TransactionsPage() {
 
   function handlePageChange(page: number) {
     if (page === currentPage) return
-    fetchTransactions(page)
+    fetchTransactions({ page })
   }
 
   function handleNavigateToPreviousPage() {
     if (currentPage <= 1) return
-    fetchTransactions(currentPage - 1)
+    fetchTransactions({ page: currentPage - 1 })
   }
 
   function handleNavigateToNextPage() {
     if (currentPage >= totalPages) return
-    fetchTransactions(currentPage + 1)
+    fetchTransactions({ page: currentPage + 1 })
   }
 
   useEffect(() => {
-    if (!transactions || transactions.size === 0) {
-      fetchTransactions()
+    if (!transactions || transactions.size === 0 || perPage !== 10) {
+      fetchTransactions({ perPage: 10 })
     }
 
     if (!categories || categories.size === 0) {
       fetchCategories()
     }
-  }, [transactions, fetchTransactions, categories, fetchCategories])
+  }, [])
 
   return (
     <div className="flex flex-col gap-8">

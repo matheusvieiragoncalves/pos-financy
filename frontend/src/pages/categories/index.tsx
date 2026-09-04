@@ -53,12 +53,14 @@ export function CategoriesPage() {
   )
 
   useEffect(() => {
-    fetchCategories()
-
     if (!totalTransactions) {
       fetchTransactions()
     }
-  }, [fetchCategories, fetchTransactions, totalTransactions])
+
+    if (!categories.size) {
+      fetchCategories()
+    }
+  }, [])
 
   return (
     <div>
@@ -95,7 +97,7 @@ export function CategoriesPage() {
         <CategoryStatisticalCard
           Icon={categoryWithMostTransactions?.Icon || Tag}
           iconColor="text-blue-base"
-          value={categoryWithMostTransactions?.title || ""}
+          value={categoryWithMostTransactions?.title || "Nenhuma"}
           subTitle="categoria mais utilizada"
         />
       </div>

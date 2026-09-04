@@ -8,6 +8,8 @@ import { CategoryList } from "./components/CategoryList"
 import { TransactionList } from "./components/TransactionList"
 
 export function DashboardPage() {
+  const perPage = useTransactions((state) => state.pagination.perPage)
+
   const transactions = useTransactions((state) => state.transactions)
   const fetchTransactions = useTransactions((state) => state.fetchTransactions)
 
@@ -19,8 +21,13 @@ export function DashboardPage() {
   const fetchCategories = useCategories((state) => state.fetchCategories)
 
   useEffect(() => {
-    fetchTransactions()
-    fetchCategories()
+    if (!transactions || transactions.size === 0 || perPage !== 5) {
+      fetchTransactions({ perPage: 5 })
+    }
+
+    if (!categories || categories.size === 0) {
+      fetchCategories()
+    }
   }, [])
 
   return (

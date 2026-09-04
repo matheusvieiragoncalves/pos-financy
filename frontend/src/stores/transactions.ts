@@ -16,6 +16,11 @@ import { immer } from "zustand/middleware/immer"
 
 type TPaginationMeta = Omit<IPagination<never>, "items">
 
+type TPaginationOptions = {
+  page?: number
+  perPage?: number
+}
+
 type TTransactionsState = {
   totalIn: number
   totalOut: number
@@ -23,7 +28,7 @@ type TTransactionsState = {
   transactions: Map<string, Transaction>
   pagination: TPaginationMeta
   isLoading: boolean
-  fetchTransactions: (page?: number) => Promise<void>
+  fetchTransactions: (options?: TPaginationOptions) => Promise<void>
   createTransaction: (transaction: TTransactionValueToCreate) => Promise<void>
   updateTransaction: (
     id: string,
@@ -46,7 +51,7 @@ export const useTransactions = create<
   [["zustand/immer", never]]
 >(
   immer((set, get) => {
-    async function fetchTransactions(page = 1) {
+    async function fetchTransactions(options?: TPaginationOptions) {
       set((state) => {
         state.isLoading = true
       })
@@ -55,7 +60,10 @@ export const useTransactions = create<
         const response = await apolloClient.query({
           query: QUERY_FETCH_TRANSACTIONS,
           variables: {
-            pagination: { page, perPage: get().pagination.perPage },
+            pagination: {
+              page: options?.page ?? 1,
+              perPage: options?.perPage ?? get().pagination.perPage,
+            },
           },
           fetchPolicy: "no-cache",
         })
