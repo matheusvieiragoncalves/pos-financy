@@ -1,6 +1,7 @@
 import { CategoryTitleTag } from "@/components/category"
 import { TransactionTitle } from "@/components/transaction"
 import { TransactionAmount } from "@/components/transaction/TransactionAmount"
+import { CreateTransactionDialog } from "@/components/transaction/TransactionDialog"
 import { Button } from "@/components/ui/button"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,7 +10,6 @@ import type { Transaction } from "@/models/transaction.model"
 import { ChevronRight, Plus } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { CreateTransactionDialog } from "./TransactionDialog"
 
 interface ITransactionListProps {
   transactions: Transaction[]

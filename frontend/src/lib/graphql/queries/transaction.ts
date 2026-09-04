@@ -21,6 +21,7 @@ export const QUERY_FETCH_TRANSACTIONS: TypedDocumentNode<
       totalItems
       currentPage
       totalPages
+      perPage
       items {
         id
         amount

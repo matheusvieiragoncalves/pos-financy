@@ -124,6 +124,7 @@ type TransactionModel {
 type TransactionPaginatedOutput {
   currentPage: Int!
   items: [TransactionModel!]!
+  perPage: Int!
   totalItems: Int!
   totalPages: Int!
 }

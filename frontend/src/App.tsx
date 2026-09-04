@@ -4,6 +4,7 @@ import { LoginPage } from "./pages/auth/Login"
 import { SignUpPage } from "./pages/auth/SignUp"
 import { CategoriesPage } from "./pages/categories"
 import { DashboardPage } from "./pages/dashboard"
+import { TransactionsPage } from "./pages/transactions"
 import { useAuthStore } from "./stores/auth"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -49,6 +50,14 @@ export function App() {
           element={
             <ProtectedRoute>
               <CategoriesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <ProtectedRoute>
+              <TransactionsPage />
             </ProtectedRoute>
           }
         />

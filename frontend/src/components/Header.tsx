@@ -12,7 +12,7 @@ export function Header() {
 
   const menuOptions = [
     { name: "Dashboard", path: "/" },
-    { name: "Transações", path: "/members" },
+    { name: "Transações", path: "/transactions" },
     { name: "Categorias", path: "/categories" },
   ]
 

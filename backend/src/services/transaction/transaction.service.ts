@@ -72,7 +72,8 @@ export class TransactionService implements ITransactionService {
       items: transactions.map((t) => this._toTransactionModel(t)),
       totalItems,
       currentPage: page,
-      totalPages: Math.ceil(totalItems / perPage)
+      totalPages: Math.ceil(totalItems / perPage),
+      perPage
     };
   }
 

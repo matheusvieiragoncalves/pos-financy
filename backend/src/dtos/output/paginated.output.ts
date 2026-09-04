@@ -16,6 +16,9 @@ export function PaginatedOutput<TItem extends object>(
 
     @Field(() => Int)
     totalPages!: number;
+
+    @Field(() => Int)
+    perPage!: number;
   }
 
   return PaginatedOutputClass;
