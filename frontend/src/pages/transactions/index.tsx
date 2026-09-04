@@ -1,4 +1,3 @@
-import { CreateTransactionDialog } from "@/components/transaction/TransactionDialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Plus, SquarePen, Trash } from "lucide-react"
@@ -6,7 +5,13 @@ import { useEffect, useState } from "react"
 
 import { CategoryIconTag, CategoryTitleTag } from "@/components/category"
 import { Paginator } from "@/components/Paginator"
-import { TransactionType } from "@/components/transaction/TransactionType"
+
+import {
+  TransactionCreateDialog,
+  TransactionType,
+} from "@/components/transaction"
+
+import { TransactionDeleteDialog } from "@/components/transaction/TransactionDeleteDialog"
 import {
   Table,
   TableBody,
@@ -15,50 +20,47 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import type { Transaction } from "@/models/transaction.model"
+import { useCategories } from "@/stores/categories"
 import { useTransactions } from "@/stores/transactions"
 
 export function TransactionsPage() {
-  // const [transactionSelected, setTransactionSelected] =
-  //   useState<Transaction | null>(null)
+  const [transactionSelected, setTransactionSelected] =
+    useState<Transaction | null>(null)
 
   const [openDialog, setOpenDialog] = useState(false)
-  // const [openDialogExclude, setOpenDialogExclude] = useState(false)
-
-  // function handleCreateTransaction() {
-  //   setTransactionSelected(null)
-  //   setOpenDialog(true)
-  // }
-
-  // function handleEditTransaction(transaction: Transaction) {
-  //   setTransactionSelected(transaction)
-  //   setOpenDialog(true)
-  // }
-
-  // function handleDeleteTransaction(transaction: Transaction) {
-  //   setTransactionSelected(transaction)
-  //   setOpenDialogExclude(true)
-  // }
-
-  // function handleCloseDialogs() {
-  //   setTransactionSelected(null)
-  //   setOpenDialogExclude(false)
-  //   setOpenDialog(false)
-  // }
+  const [openDialogExclude, setOpenDialogExclude] = useState(false)
 
   const transactions = useTransactions((state) => state.transactions)
   const { currentPage, perPage, totalItems, totalPages } = useTransactions(
     (state) => state.pagination
   )
 
-  console.log({ perPage })
-
   const fetchTransactions = useTransactions((state) => state.fetchTransactions)
 
-  useEffect(() => {
-    if (!transactions || transactions.size === 0) {
-      fetchTransactions()
-    }
-  }, [transactions, fetchTransactions])
+  const categories = useCategories((state) => state.categories)
+  const fetchCategories = useCategories((state) => state.fetchCategories)
+
+  function handleCreateTransaction() {
+    setTransactionSelected(null)
+    setOpenDialog(true)
+  }
+
+  function handleEditTransaction(transaction: Transaction) {
+    setTransactionSelected(transaction)
+    setOpenDialog(true)
+  }
+
+  function handleDeleteTransaction(transaction: Transaction) {
+    setTransactionSelected(transaction)
+    setOpenDialogExclude(true)
+  }
+
+  function handleCloseDialogs() {
+    setTransactionSelected(null)
+    setOpenDialogExclude(false)
+    setOpenDialog(false)
+  }
 
   function handlePageChange(page: number) {
     if (page === currentPage) return
@@ -75,6 +77,16 @@ export function TransactionsPage() {
     fetchTransactions(currentPage + 1)
   }
 
+  useEffect(() => {
+    if (!transactions || transactions.size === 0) {
+      fetchTransactions()
+    }
+
+    if (!categories || categories.size === 0) {
+      fetchCategories()
+    }
+  }, [transactions, fetchTransactions, categories, fetchCategories])
+
   return (
     <div className="flex flex-col gap-8">
       <div className="mt-12 flex w-full items-center justify-between">
@@ -86,7 +98,7 @@ export function TransactionsPage() {
         </div>
         <Button
           className="flex bg-brand-base text-white hover:bg-brand-dark"
-          onClick={() => setOpenDialog(true)}
+          onClick={handleCreateTransaction}
         >
           <Plus /> Nova transação
         </Button>
@@ -120,15 +132,17 @@ export function TransactionsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Array.from(transactions.values()).map(
-                ({
+              {Array.from(transactions.values()).map((transaction) => {
+                const {
                   description,
                   id,
                   formattedDate,
                   type,
                   formattedAmount,
                   category: { colorCSS, Icon, title },
-                }) => (
+                } = transaction
+
+                return (
                   <TableRow key={id}>
                     <TableCell className="flex min-w-[30vw] items-center gap-4 px-6 py-4 text-left text-sm text-gray-800">
                       <CategoryIconTag Icon={Icon} colorCSS={colorCSS} />
@@ -147,16 +161,22 @@ export function TransactionsPage() {
                       {formattedAmount}
                     </TableCell>
                     <TableCell className="flex justify-end gap-2 p-5 text-right">
-                      <Button className="rounded-lg border border-gray-300 bg-white p-2 hover:bg-white">
+                      <Button
+                        className="rounded-lg border border-gray-300 bg-white p-2 hover:bg-white"
+                        onClick={() => handleDeleteTransaction(transaction)}
+                      >
                         <Trash className="size-4 text-danger" />
                       </Button>
-                      <Button className="rounded-lg border border-gray-300 bg-white p-2 hover:bg-white">
+                      <Button
+                        className="rounded-lg border border-gray-300 bg-white p-2 hover:bg-white"
+                        onClick={() => handleEditTransaction(transaction)}
+                      >
                         <SquarePen className="size-4 text-gray-700" />
                       </Button>
                     </TableCell>
                   </TableRow>
                 )
-              )}
+              })}
             </TableBody>
           </Table>
         </CardContent>
@@ -176,7 +196,19 @@ export function TransactionsPage() {
         </CardFooter>
       </Card>
 
-      <CreateTransactionDialog open={openDialog} onOpenChange={setOpenDialog} />
+      <TransactionCreateDialog
+        key={`create-or-edit-${transactionSelected?.id}`}
+        open={openDialog}
+        onClose={handleCloseDialogs}
+        transaction={transactionSelected}
+      />
+
+      <TransactionDeleteDialog
+        key={`delete-${transactionSelected?.id}`}
+        onClose={handleCloseDialogs}
+        open={openDialogExclude}
+        transaction={transactionSelected as Transaction}
+      />
     </div>
   )
 }

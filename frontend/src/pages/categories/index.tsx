@@ -81,15 +81,15 @@ export function CategoriesPage() {
         <CategoryStatisticalCard
           Icon={Tag}
           iconColor="text-gray-700"
-          value={totalTransactions}
-          subTitle="Total Categories"
+          value={categories.size}
+          subTitle="Total de Categories"
         />
 
         <CategoryStatisticalCard
           Icon={ArrowDownUp}
           iconColor="text-purple-base"
           value={totalTransactions}
-          subTitle="Total Categories"
+          subTitle="Total de Transações"
         />
 
         <CategoryStatisticalCard

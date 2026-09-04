@@ -1,7 +1,10 @@
 import type { IPagination } from "@/@types"
 import { toast } from "@/components/ui/toast"
 import { apolloClient } from "@/lib/graphql/apollo"
-import { MUTATION_CREATE_TRANSACTION } from "@/lib/graphql/mutations/transaction"
+import { MUTATION_CREATE_TRANSACTION } from "@/lib/graphql/mutations/transaction/create.graphql"
+import { MUTATION_DELETE_TRANSACTION } from "@/lib/graphql/mutations/transaction/delete.graphql"
+
+import { MUTATION_UPDATE_TRANSACTION } from "@/lib/graphql/mutations/transaction/update.graphql"
 import { QUERY_FETCH_TRANSACTIONS } from "@/lib/graphql/queries/transaction"
 import {
   Transaction,
@@ -22,6 +25,11 @@ type TTransactionsState = {
   isLoading: boolean
   fetchTransactions: (page?: number) => Promise<void>
   createTransaction: (transaction: TTransactionValueToCreate) => Promise<void>
+  updateTransaction: (
+    id: string,
+    transaction: TTransactionValueToCreate
+  ) => Promise<void>
+  deleteTransaction: (id: string) => Promise<void>
 }
 
 enableMapSet()
@@ -117,6 +125,75 @@ export const useTransactions = create<
       }
     }
 
+    async function updateTransaction(
+      id: string,
+      data: TTransactionValueToCreate
+    ) {
+      set((state) => {
+        state.isLoading = true
+      })
+
+      try {
+        const response = await apolloClient.mutate({
+          mutation: MUTATION_UPDATE_TRANSACTION,
+          variables: { id, data },
+        })
+
+        if (!response?.data?.transactionUpdate) {
+          toast.add({ title: "Erro ao atualizar transação", type: "error" })
+          return
+        }
+
+        await fetchTransactions()
+
+        toast.add({
+          title: "Transação atualizada com sucesso",
+          type: "success",
+        })
+      } catch {
+        set((state) => {
+          state.isLoading = false
+        })
+
+        toast.add({ title: "Erro ao atualizar transação", type: "error" })
+      }
+    }
+
+    async function deleteTransaction(id: string) {
+      set((state) => {
+        state.isLoading = true
+      })
+
+      try {
+        const response = await apolloClient.mutate({
+          mutation: MUTATION_DELETE_TRANSACTION,
+          variables: { id },
+          fetchPolicy: "no-cache",
+        })
+
+        if (!response?.data?.transactionDelete) {
+          toast.add({ title: "Erro ao excluir transação", type: "error" })
+          return
+        }
+
+        await fetchTransactions()
+
+        toast.add({ title: "Transação excluída com sucesso", type: "success" })
+      } catch (err) {
+        set((state) => {
+          state.isLoading = false
+        })
+
+        let message = "Erro ao excluir transação"
+
+        if (err instanceof Error) {
+          message = err.message
+        }
+
+        toast.add({ title: message, type: "error" })
+      }
+    }
+
     return {
       totalIn: 0,
       totalOut: 0,
@@ -126,6 +203,8 @@ export const useTransactions = create<
       isLoading: false,
       fetchTransactions,
       createTransaction,
+      updateTransaction,
+      deleteTransaction,
     }
   })
 )

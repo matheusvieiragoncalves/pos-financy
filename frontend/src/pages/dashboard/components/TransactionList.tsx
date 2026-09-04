@@ -1,7 +1,11 @@
 import { CategoryTitleTag } from "@/components/category"
-import { TransactionTitle } from "@/components/transaction"
-import { TransactionAmount } from "@/components/transaction/TransactionAmount"
-import { CreateTransactionDialog } from "@/components/transaction/TransactionDialog"
+
+import {
+  TransactionAmount,
+  TransactionCreateDialog,
+  TransactionTitle,
+} from "@/components/transaction"
+
 import { Button } from "@/components/ui/button"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -84,7 +88,7 @@ export function TransactionList({
         </div>
       </CardContent>
 
-      <CreateTransactionDialog open={openDialog} onOpenChange={setOpenDialog} />
+      <TransactionCreateDialog open={openDialog} onOpenChange={setOpenDialog} />
     </Card>
   )
 }

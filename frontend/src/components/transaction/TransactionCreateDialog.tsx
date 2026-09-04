@@ -36,66 +36,68 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import type { Transaction } from "@/models/transaction.model"
 import { useCategories } from "@/stores/categories"
 
-interface ICreateTransactionDialogProps {
+interface ITransactionCreateDialogProps {
   open: boolean
-  onOpenChange: (open: boolean) => void
+  transaction?: Transaction | null
+  onClose: () => void
 }
 
-export function CreateTransactionDialog({
+export function TransactionCreateDialog({
   open,
-  onOpenChange,
-}: ICreateTransactionDialogProps) {
-  const [date, setDate] = useState<Date>()
-  const [description, setDescription] = useState("")
-  const [amountInCents, setAmountInCents] = useState(0)
-  const [categoryId, setCategoryId] = useState<null | string>(null)
-  const [type, setType] = useState(TransactionTypeEnum.OUT)
+  transaction,
+  onClose,
+}: ITransactionCreateDialogProps) {
+  const [date, setDate] = useState<Date>(
+    (transaction?.date as Date) || new Date()
+  )
+  const [description, setDescription] = useState(transaction?.description || "")
+
+  const [amountInCents, setAmountInCents] = useState(
+    transaction ? transaction.amount * 100 : 0
+  )
+  const [categoryId, setCategoryId] = useState<null | string>(
+    transaction?.category?.id || null
+  )
+  const [type, setType] = useState(transaction?.type || TransactionTypeEnum.OUT)
 
   const isLoading = useTransactions((state) => state.isLoading)
   const createTransaction = useTransactions((state) => state.createTransaction)
+  const updateTransaction = useTransactions((state) => state.updateTransaction)
 
   const categories = useCategories((state) => state.categories)
-
-  const items = useMemo(
-    () => [
-      { label: "Selecione", value: null },
-      ...Array.from(categories.values()).map((item) => ({
-        label: item.title,
-        value: item.id,
-      })),
-    ],
-    [categories]
-  )
-
-  const isInvalidForm = useMemo(() => {
-    return !date || !description || !amountInCents || !categoryId || !type
-  }, [date, description, amountInCents, categoryId, type])
 
   async function handleSubmit(event: React.SubmitEvent) {
     event.preventDefault()
 
     if (!date || !description || !amountInCents || !categoryId || !type) return
 
-    createTransaction({
+    const obj = {
       date,
       description,
       amount: amountInCents / 100,
       categoryId,
       type,
-    })
+    }
+
+    if (transaction?.id) {
+      updateTransaction(transaction.id, obj)
+    } else {
+      createTransaction(obj)
+    }
 
     onCloseDialog()
   }
 
   function onCloseDialog() {
-    setDate(undefined)
+    setDate(new Date())
     setDescription("")
     setAmountInCents(0)
     setCategoryId(null)
     setType(TransactionTypeEnum.OUT)
-    onOpenChange(false)
+    onClose()
   }
 
   function formatCurrency(valueInCents: number) {
@@ -109,6 +111,21 @@ export function CreateTransactionDialog({
     const digitsOnly = e.target.value.replace(/\D/g, "") // remove tudo que não for número
     setAmountInCents(Number(digitsOnly))
   }
+
+  const isInvalidForm = useMemo(() => {
+    return !date || !description || !amountInCents || !categoryId || !type
+  }, [date, description, amountInCents, categoryId, type])
+
+  const items = useMemo(
+    () => [
+      { label: "Selecione", value: null },
+      ...Array.from(categories.values()).map((item) => ({
+        label: item.title,
+        value: item.id,
+      })),
+    ],
+    [categories]
+  )
 
   return (
     <Dialog open={open} onOpenChange={onCloseDialog}>
@@ -125,7 +142,7 @@ export function CreateTransactionDialog({
           <FieldSet>
             <FieldGroup>
               <RadioGroup
-                defaultValue={TransactionTypeEnum.OUT}
+                defaultValue={transaction?.type || TransactionTypeEnum.OUT}
                 className="flex gap-3 rounded-xl border p-2"
                 onValueChange={(value) => setType(value)}
               >
@@ -251,6 +268,7 @@ export function CreateTransactionDialog({
 
               <Select
                 items={items}
+                defaultValue={categoryId}
                 onValueChange={(value: string | null) => setCategoryId(value)}
               >
                 <SelectTrigger className="rounded-lg border-gray-300 bg-white py-6 text-base">
