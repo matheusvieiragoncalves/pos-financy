@@ -1,7 +1,8 @@
 // backend/src/resolvers/auth/auth.resolver.ts
 import { LoginInput } from '@/dtos/input/auth.input';
 import { LoginOutput } from '@/dtos/output/auth.output';
-import { UnauthorizedError } from '@/errors/unauthorized-error';
+import { UnauthorizedError } from '@/errors';
+
 import { JwtService } from '@/services/jwt/jwt.service';
 import { IJwtService } from '@/services/jwt/jwt.service.interface';
 import { PasswordService } from '@/services/password/password.service';

@@ -9,8 +9,9 @@ import {
   CategoryColorEnum,
   CategoryIconEnum
 } from '@/enums';
-import { NotFoundError } from '@/errors/not-found-error';
-import { UnauthorizedError } from '@/errors/unauthorized-error';
+
+import { BadRequestError, NotFoundError, UnauthorizedError } from '@/errors';
+
 import { Category } from '@/generated/prisma/client';
 import { CategoryModel } from '@/models/category.model';
 import { ICategoryService } from './category.service.interface';
@@ -20,7 +21,7 @@ export class CategoryService implements ICategoryService {
     const category = await prismaClient.category.findUnique({ where: { id } });
 
     if (!category) {
-      throw new NotFoundError('Category not found');
+      throw new NotFoundError('Categoria não encontrada');
     }
 
     return this._toCategoryModel(category);
@@ -57,7 +58,7 @@ export class CategoryService implements ICategoryService {
 
     if (userId !== currentUserId) {
       throw new UnauthorizedError(
-        'You are not authorized to update this category'
+        'Você não está autorizado a atualizar esta categoria'
       );
     }
 
@@ -74,7 +75,17 @@ export class CategoryService implements ICategoryService {
 
     if (userId !== currentUserId) {
       throw new UnauthorizedError(
-        'You are not authorized to delete this category'
+        'Você não está autorizado a excluir esta categoria'
+      );
+    }
+
+    const hasTransactions = await prismaClient.transaction.count({
+      where: { categoryId: id }
+    });
+
+    if (hasTransactions > 0) {
+      throw new BadRequestError(
+        'Não é possível excluir uma categoria com transações existentes'
       );
     }
 

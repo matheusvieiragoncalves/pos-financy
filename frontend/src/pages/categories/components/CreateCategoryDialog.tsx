@@ -77,7 +77,7 @@ export function CreateCategoryDialog({
 
   const colorOptions = Object.entries(CATEGORY_COLOR_MAP).map(
     ([key, value]) => ({
-      color: value.base,
+      color: value.bgBase,
       value: key,
     })
   )
@@ -182,7 +182,7 @@ export function CreateCategoryDialog({
                       id={value}
                       className="peer hidden h-full w-full"
                     />
-                    <div className={`h-full w-full rounded-sm bg-${color} `} />
+                    <div className={`h-full w-full rounded-sm ${color}`} />
                   </FieldLabel>
                 ))}
               </RadioGroup>

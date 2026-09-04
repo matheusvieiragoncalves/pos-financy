@@ -25,7 +25,6 @@ export function DeleteCategoryDialog({
   const deleteCategory = useCategories((state) => state.deleteCategory)
 
   function handleDeleteCategory() {
-    console.log(`Deleted category with id: ${category.id}`)
     deleteCategory(category.id)
     onClose()
   }

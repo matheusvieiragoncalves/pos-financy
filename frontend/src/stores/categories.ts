@@ -154,12 +154,18 @@ export const useCategories = create<
         await fetchCategories()
 
         toast.add({ title: "Categoria excluída com sucesso", type: "success" })
-      } catch {
+      } catch (err) {
         set((state) => {
           state.isLoading = false
         })
 
-        toast.add({ title: "Erro ao excluir categoria", type: "error" })
+        let message = "Erro ao excluir categoria"
+
+        if (err instanceof Error) {
+          message = err.message
+        }
+
+        toast.add({ title: message, type: "error" })
       }
     }
 

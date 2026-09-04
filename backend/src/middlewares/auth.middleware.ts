@@ -1,5 +1,6 @@
 import { isPublicField } from '@/decorators/public.decorator';
-import { UnauthorizedError } from '@/errors/unauthorized-error';
+import { UnauthorizedError } from '@/errors';
+
 import { TGraphQLContext } from '@/graphql/context';
 import { MiddlewareFn } from 'type-graphql';
 

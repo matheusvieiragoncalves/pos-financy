@@ -8,8 +8,9 @@ import {
 import { TransactionsTotalOutput } from '@/dtos/output/total.output';
 import { TransactionPaginatedOutput } from '@/dtos/output/transaction-paginated.output';
 import { TransactionTypeEnum } from '@/enums';
-import { NotFoundError } from '@/errors/not-found-error';
-import { UnauthorizedError } from '@/errors/unauthorized-error';
+
+import { NotFoundError, UnauthorizedError } from '@/errors';
+
 import { Transaction } from '@/generated/prisma/client';
 import { TransactionModel } from '@/models/transaction.model';
 import { CategoryService } from '../category/category.service';
@@ -27,7 +28,7 @@ export class TransactionService implements ITransactionService {
     });
 
     if (!transaction) {
-      throw new NotFoundError('Transaction not found');
+      throw new NotFoundError('Transação não encontrada');
     }
 
     return this._toTransactionModel(transaction);
@@ -99,7 +100,7 @@ export class TransactionService implements ITransactionService {
 
     if (userId !== currentUserId) {
       throw new UnauthorizedError(
-        'You are not authorized to update this transaction'
+        'Você não está autorizado a atualizar esta transação'
       );
     }
 
@@ -119,7 +120,7 @@ export class TransactionService implements ITransactionService {
 
     if (userId !== currentUserId) {
       throw new UnauthorizedError(
-        'You are not authorized to delete this transaction'
+        'Você não está autorizado a excluir esta transação'
       );
     }
 

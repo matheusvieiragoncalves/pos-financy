@@ -40,10 +40,13 @@ export function CategoriesPage() {
   }
 
   const categories = useCategories((state) => state.categories)
+
   const totalTransactions = useTransactions(
     (state) => state.pagination.totalItems
   )
+
   const fetchCategories = useCategories((state) => state.fetchCategories)
+  const fetchTransactions = useTransactions((state) => state.fetchTransactions)
 
   const categoryWithMostTransactions = useCategories(
     (state) => state.categoryWithMostTransactions
@@ -51,7 +54,11 @@ export function CategoriesPage() {
 
   useEffect(() => {
     fetchCategories()
-  }, [])
+
+    if (!totalTransactions) {
+      fetchTransactions()
+    }
+  }, [fetchCategories, fetchTransactions, totalTransactions])
 
   return (
     <div>
