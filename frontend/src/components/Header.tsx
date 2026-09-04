@@ -6,9 +6,9 @@ import { Button } from "./ui/button"
 
 export function Header() {
   const location = useLocation()
-  const { isAuthenticated } = useAuthStore()
 
-  const user = { name: "Matheus" }
+  const user = useAuthStore((state) => state.user)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
   const menuOptions = [
     { name: "Dashboard", path: "/" },

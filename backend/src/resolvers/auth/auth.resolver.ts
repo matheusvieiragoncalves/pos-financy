@@ -42,6 +42,8 @@ export class AuthResolver {
 
     const { id } = user;
 
-    return this.jwtService.sign({ id, email });
+    const { accessToken } = this.jwtService.sign({ id, email });
+
+    return { accessToken, user };
   }
 }

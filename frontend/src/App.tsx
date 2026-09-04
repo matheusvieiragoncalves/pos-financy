@@ -4,6 +4,7 @@ import { LoginPage } from "./pages/auth/Login"
 import { SignUpPage } from "./pages/auth/SignUp"
 import { CategoriesPage } from "./pages/categories"
 import { DashboardPage } from "./pages/dashboard"
+import { ProfilePage } from "./pages/profile"
 import { TransactionsPage } from "./pages/transactions"
 import { useAuthStore } from "./stores/auth"
 
@@ -58,6 +59,14 @@ export function App() {
           element={
             <ProtectedRoute>
               <TransactionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />

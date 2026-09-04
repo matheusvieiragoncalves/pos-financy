@@ -79,6 +79,7 @@ input LoginInput {
 
 type LoginOutput {
   accessToken: String!
+  user: UserModel!
 }
 
 type Mutation {
@@ -91,7 +92,7 @@ type Mutation {
   transactionUpdate(data: UpdateTransactionInput!, id: String!): TransactionModel!
   userCreate(data: CreateUserInput!): UserModel!
   userDelete(id: String!): UserModel!
-  userUpdate(data: UpdateUserInput!, id: String!): UserModel!
+  userUpdate(data: UpdateUserInput!): UserModel!
 }
 
 input PaginationInput {

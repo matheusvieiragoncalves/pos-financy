@@ -1,3 +1,4 @@
+import { CurrentUserId } from '@/decorators/current-user-id.decorator';
 import { Public } from '@/decorators/public.decorator';
 import { CreateUserInput, UpdateUserInput } from '@/dtos/input/user.input';
 import { isAuthenticated } from '@/middlewares/auth.middleware';
@@ -26,7 +27,7 @@ export class UserResolver {
 
   @Mutation(() => UserModel)
   async userUpdate(
-    @Arg('id', () => String) id: string,
+    @CurrentUserId() id: string,
     @Arg('data', () => UpdateUserInput) data: UpdateUserInput
   ): Promise<UserModel> {
     return this.userService.update(id, data);
