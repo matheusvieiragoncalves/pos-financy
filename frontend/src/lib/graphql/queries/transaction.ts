@@ -1,8 +1,10 @@
+import type { IPagination } from "@/@types"
 import type { Transaction } from "@/models/transaction.model"
+
 import { gql, type TypedDocumentNode } from "@apollo/client"
 
 interface IFindAllTransactionsQueryData {
-  transactions: Transaction[]
+  transactions: IPagination<Transaction>
   transactionTotal: {
     totalIn: number
     totalOut: number
@@ -14,24 +16,30 @@ export const QUERY_FETCH_TRANSACTIONS: TypedDocumentNode<
   IFindAllTransactionsQueryData,
   void
 > = gql`
-  query FetchTransactions {
-    transactions {
-      id
-      amount
-      description
-      date
-      type
-
-      category {
+  query FetchTransactions($pagination: PaginationInput) {
+    transactions(pagination: $pagination) {
+      totalItems
+      currentPage
+      totalPages
+      items {
         id
-        title
-        color
-        icon
-      }
+        amount
+        description
+        date
+        type
 
-      createdAt
-      updatedAt
+        category {
+          id
+          title
+          color
+          icon
+        }
+
+        createdAt
+        updatedAt
+      }
     }
+
     transactionTotal {
       totalIn
       totalOut

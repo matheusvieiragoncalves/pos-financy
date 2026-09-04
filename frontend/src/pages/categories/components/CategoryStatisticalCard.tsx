@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { type LucideProps } from "lucide-react"
 
 interface ICategoryStatisticalProps {
-  value: string
+  value: string | number
   subTitle: string
   Icon: React.ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
