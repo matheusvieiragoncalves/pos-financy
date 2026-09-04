@@ -8,6 +8,11 @@ type TCategoryAttrs = Omit<
   "Icon" | "colorCSS" | "totalAmountTransactionsFormatted"
 >
 
+export type TCategoryValueToCreate = Pick<
+  Category,
+  "title" | "description" | "color" | "icon"
+>
+
 export class Category {
   id!: string
   title!: string

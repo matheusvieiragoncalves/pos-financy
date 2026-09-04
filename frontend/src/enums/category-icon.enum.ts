@@ -43,7 +43,6 @@ export const CATEGORY_ICON_MAP: Record<
     Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
   >
 > = {
-  [CategoryIconEnum.BAGGAGE_CLAIM]: BaggageClaim,
   [CategoryIconEnum.BRIEFCASE_BUSINESS]: BriefcaseBusiness,
   [CategoryIconEnum.CAR_FRONT]: CarFront,
   [CategoryIconEnum.HEART_PULSE]: HeartPulse,
@@ -57,6 +56,7 @@ export const CATEGORY_ICON_MAP: Record<
   [CategoryIconEnum.GIFT]: Gift,
   [CategoryIconEnum.DUMBBELL]: Dumbbell,
   [CategoryIconEnum.BOOK_OPEN]: BookOpen,
+  [CategoryIconEnum.BAGGAGE_CLAIM]: BaggageClaim,
   [CategoryIconEnum.MAILBOX]: Mailbox,
   [CategoryIconEnum.RECEIPT_TEXT]: ReceiptText,
 }

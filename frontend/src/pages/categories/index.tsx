@@ -1,11 +1,42 @@
 import { Button } from "@/components/ui/button"
+import type { Category } from "@/models/category.model"
 import { useCategories } from "@/stores/categories"
 import { Plus, Tag } from "lucide-react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { CategoryCard } from "./components/CategoryCard"
 import { CategoryStatisticalCard } from "./components/CategoryStatisticalCard"
+import { CreateCategoryDialog } from "./components/CreateCategoryDialog"
 
 export function CategoriesPage() {
+  const [categorySelected, setCategorySelected] = useState<Category | null>(
+    null
+  )
+
+  const [openDialog, setOpenDialog] = useState(false)
+
+  const [, setOpenDialogExclude] = useState(false)
+
+  function handleEditCategory(category: Category) {
+    setCategorySelected(category)
+    setOpenDialog(true)
+  }
+
+  // function handleCreateCategory() {
+  //   setCategorySelected(null)
+  //   setOpenDialog(true)
+  // }
+
+  function handleDeleteCategory(category: Category) {
+    setCategorySelected(category)
+    setOpenDialogExclude(true)
+  }
+
+  function handleCloseDialogs() {
+    setCategorySelected(null)
+    setOpenDialogExclude(false)
+    setOpenDialog(false)
+  }
+
   const categories = useCategories((state) => state.categories)
   const fetchCategories = useCategories((state) => state.fetchCategories)
 
@@ -13,18 +44,19 @@ export function CategoriesPage() {
     fetchCategories()
   }, [])
 
-  console.log(categories)
-
   return (
     <div>
-      <div className="flex w-full items-center justify-between">
+      <div className="mt-12 flex w-full items-center justify-between">
         <div className="w-full">
           <h4 className="text-2xl font-bold text-gray-800">Categorias</h4>
           <h5 className="text-base text-gray-600">
             Organize suas transações por categorias
           </h5>
         </div>
-        <Button className="flex bg-brand-base text-white">
+        <Button
+          className="flex bg-brand-base text-white"
+          onClick={() => setOpenDialog(true)}
+        >
           <Plus /> Nova categoria
         </Button>
       </div>
@@ -54,9 +86,21 @@ export function CategoriesPage() {
 
       <div className="mt-8 grid flex-1 grid-cols-4 items-start gap-4">
         {Array.from(categories.values()).map((category) => (
-          <CategoryCard key={category.id} category={category} />
+          <CategoryCard
+            key={category.id}
+            category={category}
+            onEdit={handleEditCategory}
+            onDelete={handleDeleteCategory}
+          />
         ))}
       </div>
+
+      <CreateCategoryDialog
+        key={categorySelected?.id || "new"}
+        open={openDialog}
+        onClose={handleCloseDialogs}
+        category={categorySelected}
+      />
     </div>
   )
 }
