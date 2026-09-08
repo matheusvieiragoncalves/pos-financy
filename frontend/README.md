@@ -2,30 +2,22 @@
 
 ## Requisitos funcionais:
 
-[] O usuário pode criar uma conta e fazer login
-[] Deve ser possível criar uma transação
-[] Deve ser possível deletar uma transação
-[] Deve ser possível editar uma transação
-[] Deve ser possível listar todas as transações
-[] Deve ser possível criar uma categoria
-[] Deve ser possível deletar uma categoria
-[] Deve ser possível editar uma categoria
-[] Deve ser possível listar todas as categorias
-[] Siga o mais fielmente possível o layout do Figma;
-[] O usuário pode ver e gerenciar apenas as transações e categorias criadas por ele
-[] É obrigatória a criação de uma aplicação React usando GraphQL para consultas na API e Vite como bundler
+[x] O usuário pode criar uma conta e fazer login
+[x] Deve ser possível criar uma transação
+[x] Deve ser possível deletar uma transação
+[x] Deve ser possível editar uma transação
+[x] Deve ser possível listar todas as transações
+[x] Deve ser possível criar uma categoria
+[x] Deve ser possível deletar uma categoria
+[x] Deve ser possível editar uma categoria
+[x] Deve ser possível listar todas as categorias
+[x] Siga o mais fielmente possível o layout do Figma;
+[x] O usuário pode ver e gerenciar apenas as transações e categorias criadas por ele
+[x] É obrigatória a criação de uma aplicação React usando GraphQL para consultas na API e Vite como bundler
 
 ## Requisitos não funcionais:
 
 [x] Typescript
 [x] React
 [x] Vite sem framework
-[] GraphQL
-
-É flexível o uso de:
-
-[x] TailwindCSS
-[x] Shadcn
-[] React Query
-[] React Hook Form
-[] Zod
+[x] GraphQL
